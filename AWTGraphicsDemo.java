@@ -28,13 +28,13 @@ public class AWTGraphicsDemo extends Frame {
        Graphics2D g2 = (Graphics2D)g;        
        Font plainFont = new Font("Ariel", Font.PLAIN, 24);        
        g2.setFont(plainFont);
-       g2.drawString("Welcome to TutorialsPoint", 50, 70); 
+       g2.drawString("Ford Mustang", 50, 70); 
        Font italicFont = new Font("Courier 10 Pitch", Font.ITALIC, 24);        
        g2.setFont(italicFont);
-       g2.drawString("Welcome to TutorialsPoint", 50, 120); 
+       g2.drawString("Chevy Camero", 50, 120); 
        Font boldFont = new Font("Serif", Font.BOLD, 24);        
        g2.setFont(boldFont);
-       g2.drawString("Welcome to TutorialsPoint", 50, 170); 
+       g2.drawString("Pontiac Firebird", 50, 170); 
        Font boldItalicFont = new Font("Serif", Font.BOLD+Font.ITALIC, 24);        
        g2.setFont(boldItalicFont);
        g2.drawString("Welcome to TutorialsPoint", 50, 220); 
