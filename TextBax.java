@@ -16,6 +16,7 @@ public class TextBax extends JPanel implements ActionListener{
     	frame.setVisible(true);
     	frame.add(textField);
     	frame.setSize(640, 480);
+    	//changes
     }
 
     public void actionPerformed(ActionEvent e){
