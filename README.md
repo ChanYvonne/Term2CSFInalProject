@@ -15,5 +15,8 @@ Ideas to possibly implement later (WAY later):
 -allowing users to email documents to other users
 -allowing users to print their edited documents
 
-11-05-16
+05-11-16
 Hello! Welcome to MissingNo.!
+
+05-15-16
+Yvonne - created GUI with textbox, bold/italic buttons, checkbox that allows user to pick text alignment
