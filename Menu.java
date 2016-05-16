@@ -13,7 +13,7 @@ public class Menu extends JFrame implements ActionListener{
 
     public Menu(){
 	this.setTitle("Word Processor");
-	this.setSize(500,500);
+	this.setSize(800,600);
 	this.setLocation(400,200);
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
