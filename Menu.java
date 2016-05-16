@@ -18,7 +18,8 @@ public class Menu extends JFrame implements ActionListener{
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 	editor = this.getContentPane();
-	editor.setLayout(new BoxLayout(editor, BoxLayout.PAGE_AXIS));
+	editor.setLayout(new GroupLayout(getContentPane()));
+	//editor = setEditable(false);
 
         bold = new JButton("bold");
 	bold.addActionListener(this);
