@@ -10,7 +10,7 @@ public class Menu extends JFrame implements ActionListener{
     private JRadioButton lalign,center,ralign;
     private ButtonGroup alignment;
     
-    //ABITRARILY EDITING THIS FILE TO SEE IF THE MERGE WILL WORK
+    
     public Menu(){
 	this.setTitle("Word Processor");
 	this.setSize(800,600);
@@ -63,12 +63,12 @@ public class Menu extends JFrame implements ActionListener{
 	// ____ function = new ___(); name of class that turns text
 	String event = e.getActionCommand();
 	if(event.equals("turnB")){
-	    
+	    System.out.println("Bold");  
 	}
-	if(event.equals("turnI")){
-	    
+	else if(event.equals("turnI")){
+	    System.out.println("Italic");
     	}
-	if (event.equals("Left-aligned")){
+	else if (event.equals("Left-aligned")){
 	    //alignment.setSelected(getSelection(),false);
 	    lalign.setSelected(true);
 	    textbox.setHorizontalAlignment(JTextField.LEFT);
