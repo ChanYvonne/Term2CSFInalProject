@@ -9,6 +9,7 @@ public class Menu extends JFrame implements ActionListener{
     private JButton bold,italic;
     private JRadioButton lalign,center,ralign;
     private ButtonGroup alignment;
+    private Font font;
     
     
     public Menu(){
@@ -52,12 +53,12 @@ public class Menu extends JFrame implements ActionListener{
 
 	textbox = new JTextField(5);
 
-	editor.add(textbox);
 	editor.add(bold);
 	editor.add(italic);
 	editor.add(lalign);
 	editor.add(center);
 	editor.add(ralign);
+	editor.add(textbox);
     }
 
     public void actionPerformed(ActionEvent e){
