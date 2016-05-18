@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 //note for later: create our own icon(?)
+@SuppressWarnings("unchecked")
 public class Menu extends JFrame implements ActionListener{
     private Container editor;
     private JTextField textbox;
@@ -12,6 +13,7 @@ public class Menu extends JFrame implements ActionListener{
     private Font font;    
     private Font[] fontlist;
     private int size;
+    private JComboBox fontselect;
     
 
     public Menu(){
@@ -65,19 +67,52 @@ public class Menu extends JFrame implements ActionListener{
 	size = 12;
 	GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	fontlist = e.getAllFonts();
-	font = new Font(fontlist[0].getFontName(), Font.PLAIN, size);
+	font = new Font(fontlist[0].getFamily(), Font.PLAIN, size);
 	textbox.setFont(font);
+
+	String[] listfont = new String[fontlist.length];
+	for(int i = 0; i < fontlist.length; i++){
+		listfont[i] = fontlist[i].getFamily();
+	}
+	fontselect = new JComboBox(listfont);
+	fontselect.setSelectedIndex(4);
+	fontselect.addActionListener(this);
+	editor.add(fontselect);
     }
 
     public void actionPerformed(ActionEvent e){
 	// ____ function = new ___(); name of class that turns text
 	String event = e.getActionCommand();
 	if(event.equals("turnB")){
-	    font = new Font(font.getFontName(), Font.BOLD, size);
+		String temp = font.getFamily();
+		if(font.isBold() && !font.isItalic()){
+			font = new Font(temp, Font.PLAIN, size);
+		}
+		else if(!font.isBold() && font.isItalic()){
+			font = new Font(temp, Font.ITALIC + Font.BOLD, size);
+		}
+		else if(font.isBold() && font.isItalic()){
+			font = new Font(temp, Font.ITALIC, size);
+		}
+		else{
+	    	font = new Font(temp, Font.BOLD, size);
+	    }
 	    textbox.setFont(font);
 	}
 	else if(event.equals("turnI")){
-	    font = new Font(font.getFontName(), Font.ITALIC, size);
+		String temp = font.getFamily();
+		if(font.isItalic() && !font.isBold()){
+			font = new Font(temp, Font.PLAIN, size);
+		}
+		else if(!font.isItalic() && font.isBold()){
+			font = new Font(temp, Font.BOLD + Font.ITALIC, size);
+		}
+		else if(font.isItalic() && font.isBold()){
+			font = new Font(temp, Font.BOLD, size);
+		}
+		else{
+	    	font = new Font(temp, Font.ITALIC, size);
+	    }
 	    textbox.setFont(font);
     	}
 	else if (event.equals("Left-aligned")){
@@ -88,10 +123,25 @@ public class Menu extends JFrame implements ActionListener{
 	    //alignment.setSelected(getSelection(),false);
 	    ralign.setSelected(true);
 	    textbox.setHorizontalAlignment(JTextField.RIGHT);
-	}else{
+	}else if (event.equals("Center")){
 	    //alignment.setSelected(getSelection(),false);
 	    center.setSelected(true);
 	    textbox.setHorizontalAlignment(JTextField.CENTER);
+	}
+	else{
+		if(font.isPlain()){
+			font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(), Font.PLAIN, size);
+		}
+		else if(font.isBold() && !font.isItalic()){
+			font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(), Font.BOLD, size);
+		}
+		else if(font.isItalic() && !font.isBold()){
+			font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(), Font.ITALIC, size);
+		}
+		else if(font.isBold() && font.isItalic()){
+			font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(), Font.BOLD + Font.ITALIC, size);
+		}
+		textbox.setFont(font);
 	}
  
     }
@@ -100,6 +150,5 @@ public class Menu extends JFrame implements ActionListener{
 	Menu test = new Menu();
 	test.setVisible(true);
     }
-    
     
 }
