@@ -64,7 +64,7 @@ public class Menu extends JFrame implements ActionListener{
 	editor.add(ralign);
 	editor.add(textbox);
 
-	size = 12;
+	size = 16;
 	GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	fontlist = e.getAllFonts();
 	font = new Font(fontlist[0].getFamily(), Font.PLAIN, size);
