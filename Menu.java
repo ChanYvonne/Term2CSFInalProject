@@ -9,8 +9,11 @@ public class Menu extends JFrame implements ActionListener{
     private JButton bold,italic;
     private JRadioButton lalign,center,ralign;
     private ButtonGroup alignment;
+    private Font font;    
+    private Font[] fontlist;
+    private int size;
     
-    
+
     public Menu(){
 	this.setTitle("Word Processor");
 	this.setSize(800,600);
@@ -52,22 +55,30 @@ public class Menu extends JFrame implements ActionListener{
 
 	textbox = new JTextField(5);
 
-	editor.add(textbox);
 	editor.add(bold);
 	editor.add(italic);
 	editor.add(lalign);
 	editor.add(center);
 	editor.add(ralign);
+	editor.add(textbox);
+
+	size = 12;
+	GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	fontlist = e.getAllFonts();
+	font = new Font(fontlist[0].getFontName(), Font.PLAIN, size);
+	textbox.setFont(font);
     }
 
     public void actionPerformed(ActionEvent e){
 	// ____ function = new ___(); name of class that turns text
 	String event = e.getActionCommand();
 	if(event.equals("turnB")){
-	    System.out.println("Bold");  
+	    font = new Font(font.getFontName(), Font.BOLD, size);
+	    textbox.setFont(font);
 	}
 	else if(event.equals("turnI")){
-	    System.out.println("Italic");
+	    font = new Font(font.getFontName(), Font.ITALIC, size);
+	    textbox.setFont(font);
     	}
 	else if (event.equals("Left-aligned")){
 	    //alignment.setSelected(getSelection(),false);
