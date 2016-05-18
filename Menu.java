@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 //note for later: create our own icon(?)
+@SuppressWarnings("unchecked")
 public class Menu extends JFrame implements ActionListener{
     private Container editor;
     private JTextField textbox;
@@ -12,6 +13,7 @@ public class Menu extends JFrame implements ActionListener{
     private Font font;    
     private Font[] fontlist;
     private int size;
+    private JComboBox fontselect;
     
 
     public Menu(){
@@ -67,6 +69,15 @@ public class Menu extends JFrame implements ActionListener{
 	fontlist = e.getAllFonts();
 	font = new Font(fontlist[0].getFontName(), Font.PLAIN, size);
 	textbox.setFont(font);
+
+	String[] listfont = new String[fontlist.length];
+	for(int i = 0; i < fontlist.length; i++){
+		listfont[i] = fontlist[i].getFontName();
+	}
+	fontselect = new JComboBox(listfont);
+	fontselect.setSelectedIndex(4);
+	fontselect.addActionListener(this);
+	editor.add(fontselect);
     }
 
     public void actionPerformed(ActionEvent e){
@@ -88,10 +99,21 @@ public class Menu extends JFrame implements ActionListener{
 	    //alignment.setSelected(getSelection(),false);
 	    ralign.setSelected(true);
 	    textbox.setHorizontalAlignment(JTextField.RIGHT);
-	}else{
+	}else if (event.equals("Center")){
 	    //alignment.setSelected(getSelection(),false);
 	    center.setSelected(true);
 	    textbox.setHorizontalAlignment(JTextField.CENTER);
+	}
+	else{
+		if(font.isPlain()){
+			font = new Font(fontlist[fontselect.getSelectedIndex()].getFontName(), Font.PLAIN, size);
+		}
+		else if(font.isBold()){
+			font = new Font(fontlist[fontselect.getSelectedIndex()].getFontName(), Font.BOLD, size);
+		}
+		else if(font.isItalic()){
+			font = new Font(fontlist[fontselect.getSelectedIndex()].getFontName(), Font.ITALIC, size);
+		}
 	}
  
     }
@@ -100,6 +122,5 @@ public class Menu extends JFrame implements ActionListener{
 	Menu test = new Menu();
 	test.setVisible(true);
     }
-    
     
 }
