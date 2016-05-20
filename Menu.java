@@ -13,7 +13,7 @@ public class Menu extends JFrame implements ActionListener{
     private Font font;    
     private Font[] fontlist;
     private int size;
-    private JComboBox fontselect;
+    private JComboBox fontselect, textsize;
     
 
     public Menu(){
@@ -70,15 +70,30 @@ public class Menu extends JFrame implements ActionListener{
 	fontselect = new JComboBox(listfont);
 	fontselect.setSelectedIndex(10);
 	fontselect.setEditable(true);
-	fontselect.setPreferredSize(new Dimension(250,25));
+	fontselect.setPreferredSize(new Dimension(225,25));
 	fontselect.setMaximumSize(fontselect.getPreferredSize());
 	fontselect.addActionListener(this);
+	
+	String[] sizelist = new String[20];
+	int tempsize = 12;
+	for (int x = 0; x < sizelist.length; x++){
+	    sizelist[x] = tempsize + "";
+	    tempsize += 4;
+	}
+
+	textsize = new JComboBox(sizelist);
+	textsize.setSelectedIndex(2);
+	textsize.setEditable(true);
+	textsize.setPreferredSize(new Dimension(50,25));
+        textsize.setMaximumSize(textsize.getPreferredSize());
+        textsize.addActionListener(this);
 	
 	editor.add(bold);
 	editor.add(italic);
 	editor.add(lalign);
 	editor.add(center);
 	editor.add(ralign);
+	editor.add(textsize);
 	editor.add(fontselect);
 	editor.add(textbox);	
     }
@@ -86,6 +101,8 @@ public class Menu extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e){
 	// ____ function = new ___(); name of class that turns text
 	String event = e.getActionCommand();
+        size = Integer.parseInt((String)textsize.getSelectedItem());
+	
 	if(event.equals("turnB")){
 		String temp = font.getFamily();
 		if(font.isBold() && !font.isItalic()){
