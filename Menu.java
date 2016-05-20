@@ -17,7 +17,7 @@ public class Menu extends JFrame implements ActionListener{
     
 
     public Menu(){
-	this.setTitle("Word Processor");
+	this.setTitle("Wizarding Word of Java");
 	this.setSize(800,600);
 	this.setLocation(400,200);
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -29,12 +29,12 @@ public class Menu extends JFrame implements ActionListener{
         bold = new JButton("bold");
 	bold.addActionListener(this);
 	bold.setActionCommand("turnB");
-	bold.setMnemonic(KeyEvent.VK_B);
+	//bold.setMnemonic(KeyEvent.VK_B);
 	
         italic = new JButton("italic");
 	italic.addActionListener(this);
 	italic.setActionCommand("turnI");
-	italic.setMnemonic(KeyEvent.VK_I);
+	//italic.setMnemonic(KeyEvent.VK_I);
 
 	alignment = new ButtonGroup();
 	
@@ -57,17 +57,10 @@ public class Menu extends JFrame implements ActionListener{
 
 	textbox = new JTextField(5);
 
-	editor.add(bold);
-	editor.add(italic);
-	editor.add(lalign);
-	editor.add(center);
-	editor.add(ralign);
-	editor.add(textbox);
-
 	size = 16;
 	GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	fontlist = e.getAllFonts();
-	font = new Font(fontlist[0].getFamily(), Font.PLAIN, size);
+	font = new Font(fontlist[10].getFamily(), Font.PLAIN, size);
 	textbox.setFont(font);
 
 	String[] listfont = new String[fontlist.length];
@@ -75,9 +68,19 @@ public class Menu extends JFrame implements ActionListener{
 		listfont[i] = fontlist[i].getFamily();
 	}
 	fontselect = new JComboBox(listfont);
-	fontselect.setSelectedIndex(4);
+	fontselect.setSelectedIndex(10);
+	fontselect.setEditable(true);
+	fontselect.setPreferredSize(new Dimension(250,25));
+	fontselect.setMaximumSize(fontselect.getPreferredSize());
 	fontselect.addActionListener(this);
+	
+	editor.add(bold);
+	editor.add(italic);
+	editor.add(lalign);
+	editor.add(center);
+	editor.add(ralign);
 	editor.add(fontselect);
+	editor.add(textbox);	
     }
 
     public void actionPerformed(ActionEvent e){
