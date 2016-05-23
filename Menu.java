@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
 
 @SuppressWarnings("unchecked")
 public class Menu extends JFrame implements ActionListener{
@@ -191,6 +193,16 @@ public class Menu extends JFrame implements ActionListener{
 	}
 	else if(event.equals("Save")){
 		System.out.println("LOL I'M SAVING");
+		System.out.println(System.getProperty("user.dir"));
+		savefile = new File(System.getProperty("user.dir"), "saved.txt");
+		try{
+			savefile.createNewFile();
+			FileWriter writer = new FileWriter(savefile);
+			writer.write("The quick brown fox jumps over the lazy dog");
+			writer.flush();
+			writer.close();
+		}
+		catch(IOException i){}
 	}
 	else{
 		if(font.isPlain()){
