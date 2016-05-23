@@ -13,7 +13,7 @@ public class Menu extends JFrame implements ActionListener{
     private Font[] fontlist;
     private int size;
     private JComboBox fontselect, textsize;
-    private Textbox;
+    private Textbank bank;
     
 
     public Menu(){
@@ -22,22 +22,53 @@ public class Menu extends JFrame implements ActionListener{
 	this.setLocation(400,200);
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-	Textbox words = new Textbox();
+	bank = new Textbank();	
 	
 	editor = this.getContentPane();
 	editor.setLayout(new BoxLayout(editor, BoxLayout.PAGE_AXIS));
 	//editor = setEditable(false);
 
-        bold = new JButton("bold");
-	bold.addActionListener(this);
-	bold.setActionCommand("turnB");
-	//bold.setMnemonic(KeyEvent.VK_B);
+        setUpStyle();
+	setUpAlignment();
 	
-        italic = new JButton("italic");
-	italic.addActionListener(this);
-	italic.setActionCommand("turnI");
-	//italic.setMnemonic(KeyEvent.VK_I);
+	textbox = new JTextField(5);
+	//textbox.setActionCommand("wordsAdded");
+	textbox.addActionListener(this);
+	
+	size = 16;
 
+	setUpFont();
+	setUpSize();
+		
+	editor.add(bold);
+	editor.add(italic);
+	editor.add(lalign);
+	editor.add(center);
+	editor.add(ralign);
+	editor.add(textsize);
+	editor.add(fontselect);
+	editor.add(textbox);	
+    }
+
+    public void setUpFont(){
+	GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	fontlist = e.getAllFonts();
+	font = new Font(fontlist[10].getFamily(), Font.PLAIN, size);
+	textbox.setFont(font);
+
+	String[] listfont = new String[fontlist.length];
+	for(int i = 0; i < fontlist.length; i++){
+		listfont[i] = fontlist[i].getFamily();
+	}
+	fontselect = new JComboBox(listfont);
+	fontselect.setSelectedIndex(10);
+	fontselect.setEditable(true);
+	fontselect.setPreferredSize(new Dimension(225,25));
+	fontselect.setMaximumSize(fontselect.getPreferredSize());
+	fontselect.addActionListener(this);
+    }
+
+    public void setUpAlignment(){
 	alignment = new ButtonGroup();
 	
 	lalign = new JRadioButton("Left-aligned");
@@ -57,25 +88,21 @@ public class Menu extends JFrame implements ActionListener{
 	alignment.add(center);
 	alignment.add(ralign);
 
-	textbox = new JTextField(5);
+    }
 
-	size = 16;
-	GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	fontlist = e.getAllFonts();
-	font = new Font(fontlist[10].getFamily(), Font.PLAIN, size);
-	textbox.setFont(font);
-
-	String[] listfont = new String[fontlist.length];
-	for(int i = 0; i < fontlist.length; i++){
-		listfont[i] = fontlist[i].getFamily();
-	}
-	fontselect = new JComboBox(listfont);
-	fontselect.setSelectedIndex(10);
-	fontselect.setEditable(true);
-	fontselect.setPreferredSize(new Dimension(225,25));
-	fontselect.setMaximumSize(fontselect.getPreferredSize());
-	fontselect.addActionListener(this);
+    public void setUpStyle(){
+	bold = new JButton("bold");
+	bold.addActionListener(this);
+	bold.setActionCommand("turnB");
+	//bold.setMnemonic(KeyEvent.VK_B);
 	
+        italic = new JButton("italic");
+	italic.addActionListener(this);
+	italic.setActionCommand("turnI");
+	//italic.setMnemonic(KeyEvent.VK_I);
+    }
+
+    public void setUpSize(){
 	String[] sizelist = new String[20];
 	int tempsize = 12;
 	for (int x = 0; x < sizelist.length; x++){
@@ -89,21 +116,15 @@ public class Menu extends JFrame implements ActionListener{
 	textsize.setPreferredSize(new Dimension(50,25));
         textsize.setMaximumSize(textsize.getPreferredSize());
         textsize.addActionListener(this);
-	
-	editor.add(bold);
-	editor.add(italic);
-	editor.add(lalign);
-	editor.add(center);
-	editor.add(ralign);
-	editor.add(textsize);
-	editor.add(fontselect);
-	editor.add(textbox);	
-    }
 
+    }
+    
     public void actionPerformed(ActionEvent e){
-	// ____ function = new ___(); name of class that turns text
+	String doc = textbox.getText();
+	bank.add(doc.substring(doc.length()-1),"",0,0);
+
 	String event = e.getActionCommand();
-        size = Integer.parseInt((String)textsize.getSelectedItem());
+	size = Integer.parseInt((String)textsize.getSelectedItem());
 	
 	if(event.equals("turnB")){
 		String temp = font.getFamily();
@@ -165,12 +186,16 @@ public class Menu extends JFrame implements ActionListener{
 		}
 		textbox.setFont(font);
 	}
- 
+    }
+
+    public String wordBank(){
+	return bank.toString();
     }
 
     public static void main(String[] args){
 	Menu test = new Menu();
 	test.setVisible(true);
+	System.out.println(test.wordBank());
     }
     
 }
