@@ -66,7 +66,7 @@ public class Textbox{
 	if (size == text.length){
 	  grow();
 	}
-	text[size] = new Node(word,font,size,style);
+	text[this.size] = new Node(word,font,size,style);
 	this.size++;
     }
 
