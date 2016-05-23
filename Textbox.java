@@ -51,48 +51,48 @@ public class Textbox{
     }
     
     private Node[] text;
-    private int size;
+    private int length;
 
     public Textbox(){
 	text = new Node[100];
 	/*for (int x = 0; x < text.length;x++){
 	    text[x] = new Node("","",14,0);
 	}*/
-	size = 0;
+	length = 0;
     }
 
     public void add(String word,String font,int size, int style){
 	//System.out.println(text.length);
-	if (size == text.length){
+	if (length == text.length){
 	  grow();
 	}
-	text[this.size] = new Node(word,font,size,style);
-	this.size++;
+	text[length] = new Node(word,font,size,style);
+	length++;
     }
 
     public void undo(){
-	if (size == 0){
+	if (length == 0){
 	    throw new NoSuchElementException();
 	}
-	size--;
-	text[size] = null;
+	length--;
+	text[length] = null;
     }
 
     public void grow(){ //for if the user is wordy
-	Node[] temp = new Node[size*2+1];
-	for (int x = 0; x < size; x++){
+	Node[] temp = new Node[length*2+1];
+	for (int x = 0; x < length; x++){
 	    temp[x] = text[x];
 	}
 	text = temp;
     }
 
-    public int getSize(){
-	return size;
+    public int getLength(){
+	return length;
     }
     
     public String toString(){
 	String ans = "";
-	for (int x = 0; x < size; x++){
+	for (int x = 0; x < length; x++){
 	    ans += text[x].text();
 	    //System.out.println("does it work");
 	}
@@ -107,7 +107,7 @@ public class Textbox{
 	test.add("textbox","Times New Roman", 14, 0);
 	test.add("please","Times New Roman", 14, 0);
 	test.add("work","Times New Roman", 14, 0);
-	System.out.println(test.getSize());
+	System.out.println(test.getLength());
 	System.out.println(test.toString());
     }
 }
