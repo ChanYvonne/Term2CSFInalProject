@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 @SuppressWarnings("unchecked")
 public class Menu extends JFrame implements ActionListener{
@@ -17,6 +18,7 @@ public class Menu extends JFrame implements ActionListener{
     private JMenuBar menu;
     private JMenu filemenu;
     private JMenuItem save;
+    private File savefile;
     
 
     public Menu(){
@@ -48,6 +50,7 @@ public class Menu extends JFrame implements ActionListener{
 	filemenu = new JMenu("File");
 	save = filemenu.add("Save");
 	save.setActionCommand("Save");
+	save.addActionListener(this);
 	menu.add(filemenu);
 		
 	editor.add(bold);
@@ -131,7 +134,12 @@ public class Menu extends JFrame implements ActionListener{
     
     public void actionPerformed(ActionEvent e){
 	String doc = textbox.getText();
-	bank.add(doc.substring(doc.length()-1),"",0,0);
+	try{
+		bank.add(doc.substring(doc.length()-1),"",0,0);
+	}
+	catch(IndexOutOfBoundsException i){
+		System.out.println("There is no text.");
+	}
 
 	String event = e.getActionCommand();
 	size = Integer.parseInt((String)textsize.getSelectedItem());
