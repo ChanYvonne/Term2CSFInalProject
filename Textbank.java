@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Textbox{
+public class Textbank{
 
     private class Node{
 	private String text,font;
@@ -53,7 +53,7 @@ public class Textbox{
     private Node[] text;
     private int length;
 
-    public Textbox(){
+    public Textbank(){
 	text = new Node[100];
 	/*for (int x = 0; x < text.length;x++){
 	    text[x] = new Node("","",14,0);
@@ -101,7 +101,7 @@ public class Textbox{
 
     // for some reason when I print test, it doesn't print out the text() of nodes I added
     public static void main(String[] args){
-	Textbox test = new Textbox();
+	Textbank test = new Textbank();
 	test.add("hello","Times New Roman", 14, 0);
 	test.add("my","Times New Roman", 14, 0);
 	test.add("textbox","Times New Roman", 14, 0);
