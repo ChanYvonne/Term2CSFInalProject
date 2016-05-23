@@ -55,9 +55,10 @@ public class Textbox{
 
     public Textbox(){
 	text = new Node[100];
-	for (int x = 0; x < text.length;x++){
+	/*for (int x = 0; x < text.length;x++){
 	    text[x] = new Node("","",14,0);
-	}
+	}*/
+	size = 0;
     }
 
     public void add(String word,String font,int size, int style){
@@ -66,7 +67,7 @@ public class Textbox{
 	  grow();
 	}
 	text[size] = new Node(word,font,size,style);
-	size++;
+	this.size++;
     }
 
     public void undo(){
@@ -107,6 +108,6 @@ public class Textbox{
 	test.add("please","Times New Roman", 14, 0);
 	test.add("work","Times New Roman", 14, 0);
 	System.out.println(test.getSize());
-	System.out.println(test);
+	System.out.println(test.toString());
     }
 }
