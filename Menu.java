@@ -14,6 +14,9 @@ public class Menu extends JFrame implements ActionListener{
     private int size;
     private JComboBox fontselect, textsize;
     private Textbank bank;
+    private JMenuBar menu;
+    private JMenu filemenu;
+    private JMenuItem save;
     
 
     public Menu(){
@@ -39,6 +42,13 @@ public class Menu extends JFrame implements ActionListener{
 
 	setUpFont();
 	setUpSize();
+
+	menu = new JMenuBar();
+	setJMenuBar(menu);
+	filemenu = new JMenu("File");
+	save = filemenu.add("Save");
+	save.setActionCommand("Save");
+	menu.add(filemenu);
 		
 	editor.add(bold);
 	editor.add(italic);
@@ -170,6 +180,9 @@ public class Menu extends JFrame implements ActionListener{
 	    //alignment.setSelected(getSelection(),false);
 	    center.setSelected(true);
 	    textbox.setHorizontalAlignment(JTextField.CENTER);
+	}
+	else if(event.equals("Save")){
+		System.out.println("LOL I'M SAVING");
 	}
 	else{
 		if(font.isPlain()){
