@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-//note for later: create our own icon(?)
 @SuppressWarnings("unchecked")
 public class Menu extends JFrame implements ActionListener{
     private Container editor;
@@ -14,6 +13,7 @@ public class Menu extends JFrame implements ActionListener{
     private Font[] fontlist;
     private int size;
     private JComboBox fontselect, textsize;
+    private Textbox;
     
 
     public Menu(){
@@ -22,6 +22,8 @@ public class Menu extends JFrame implements ActionListener{
 	this.setLocation(400,200);
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+	Textbox words = new Textbox();
+	
 	editor = this.getContentPane();
 	editor.setLayout(new BoxLayout(editor, BoxLayout.PAGE_AXIS));
 	//editor = setEditable(false);
