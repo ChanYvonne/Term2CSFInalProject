@@ -2,7 +2,7 @@
 
 Team Name: TBD (Word Masters?)
 
-Project Name: TBD 
+Project Name: Wizarding Word of Java
 Description: Our project is essentially a word processor in GUI form. Users will be able to accomplish the following in our text editor:
   -Undo work line by line
   -Change text from standard style into bold, italic
@@ -16,6 +16,9 @@ Ideas to possibly implement later (WAY later):
 -allowing users to print their edited documents
 
 #Start here when updating the readme. I will fix the version numbering later.
+
+05-21-16/05-20-16
+Yvonne - created a textbox to be implemented in the GUI (using an array of nodes to keep track of properties of each character)
 
 05-19-16
 Yvonne - adjusted size and orientation of dropdown menu. Made it editable so users can type in desired font for easy access.
