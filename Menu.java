@@ -19,7 +19,7 @@ public class Menu extends JFrame implements ActionListener{
     private Textbank bank;
     private JMenuBar menu;
     private JMenu filemenu;
-    private JMenuItem save;
+    private JMenuItem save, saveAs;
     private File savefile;
     
 
@@ -52,6 +52,9 @@ public class Menu extends JFrame implements ActionListener{
 	filemenu = new JMenu("File");
 	save = filemenu.add("Save");
 	save.setActionCommand("Save");
+	save.addActionListener(this);
+	saveAs = filemenu.add("Save As...");
+	saveAs.setActionCommand("Save As");
 	save.addActionListener(this);
 	menu.add(filemenu);
 		
@@ -192,18 +195,7 @@ public class Menu extends JFrame implements ActionListener{
 	    textbox.setHorizontalAlignment(JTextField.CENTER);
 	}
 	else if(event.equals("Save")){
-		System.out.println("LOL I'M SAVING");
-		System.out.println(System.getProperty("user.dir"));
-		savefile = new File(System.getProperty("user.dir"), "saved.txt");
-		try{
-			savefile.createNewFile();
-			FileWriter writer = new FileWriter(savefile);
-			String text = textbox.getText();
-			writer.write(text);
-			writer.flush();
-			writer.close();
-		}
-		catch(IOException i){}
+		save();
 	}
 	else{
 		if(font.isPlain()){
@@ -224,6 +216,21 @@ public class Menu extends JFrame implements ActionListener{
 
     public String wordBank(){
 	return bank.toString();
+    }
+
+    public void save(){
+    	savefile = new File(System.getProperty("user.dir"), "saved.txt");
+		try{
+			savefile.createNewFile();
+			FileWriter writer = new FileWriter(savefile);
+			String text = textbox.getText();
+			writer.write(text);
+			writer.flush();
+			writer.close();
+		}
+		catch(IOException i){
+			System.out.println("Cannot save at this time, please try again later");
+		}
     }
 
     public static void main(String[] args){
