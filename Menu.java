@@ -198,7 +198,8 @@ public class Menu extends JFrame implements ActionListener{
 		try{
 			savefile.createNewFile();
 			FileWriter writer = new FileWriter(savefile);
-			writer.write("The quick brown fox jumps over the lazy dog");
+			String text = textbox.getText();
+			writer.write(text);
 			writer.flush();
 			writer.close();
 		}
