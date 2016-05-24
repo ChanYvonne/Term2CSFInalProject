@@ -54,7 +54,7 @@ public class Menu extends JFrame implements ActionListener{
 	save.setActionCommand("Save");
 	save.addActionListener(this);
 	saveAs = filemenu.add("Save As...");
-	saveAs.setActionCommand("Save As");
+	saveAs.setActionCommand("SaveAs");
 	save.addActionListener(this);
 	menu.add(filemenu);
 		
@@ -194,8 +194,11 @@ public class Menu extends JFrame implements ActionListener{
 	    center.setSelected(true);
 	    textbox.setHorizontalAlignment(JTextField.CENTER);
 	}
+	else if(event.equals("SaveAs")){
+		save(true);
+	}
 	else if(event.equals("Save")){
-		save();
+		save(false);
 	}
 	else{
 		if(font.isPlain()){
@@ -218,18 +221,27 @@ public class Menu extends JFrame implements ActionListener{
 	return bank.toString();
     }
 
-    public void save(){
-    	savefile = new File(System.getProperty("user.dir"), "saved.txt");
-		try{
-			savefile.createNewFile();
-			FileWriter writer = new FileWriter(savefile);
-			String text = textbox.getText();
-			writer.write(text);
-			writer.flush();
-			writer.close();
-		}
-		catch(IOException i){
-			System.out.println("Cannot save at this time, please try again later");
+    public void save(boolean as){
+    	if(as){
+    		JFrame saveas = new JFrame("Save As...");
+    		saveas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    		//saveas.getContentPane().add(emptyLabel, BorderLayout.CENTER);
+    		saveas.pack();
+    		saveas.setVisible(true);
+    	}
+    	else{
+    		savefile = new File(System.getProperty("user.dir"), "saved.txt");
+			try{
+				savefile.createNewFile();
+				FileWriter writer = new FileWriter(savefile);
+				String text = textbox.getText();
+				writer.write(text);
+				writer.flush();
+				writer.close();
+			}
+			catch(IOException i){
+				System.out.println("Cannot save at this time, please try again later");
+			}
 		}
     }
 
