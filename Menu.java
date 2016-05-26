@@ -55,7 +55,7 @@ public class Menu extends JFrame implements ActionListener{
 	save.addActionListener(this);
 	saveAs = filemenu.add("Save As...");
 	saveAs.setActionCommand("SaveAs");
-	save.addActionListener(this);
+	saveAs.addActionListener(this);
 	menu.add(filemenu);
 		
 	editor.add(bold);
@@ -223,13 +223,19 @@ public class Menu extends JFrame implements ActionListener{
 
     public void save(boolean as){
     	if(as){
-    		JFrame saveas = new JFrame("Save As...");
+	    JFrame saveas = new JFrame();
+	    saveas.setTitle("Save As...");
+	    saveas.setSize(640, 480);
+	    saveas.setLocation(200, 100);
     		saveas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    		//saveas.getContentPane().add(emptyLabel, BorderLayout.CENTER);
-    		saveas.pack();
     		saveas.setVisible(true);
+		TreeModel model = new FileTreeModel(new File(System.getProperty("user.dir")));
+		JTree tree = new JTree(model);
+		saveas.add(tree);
+		
     	}
     	else{
+	    /*look up how to save a pdf file, would be useful for printing*/
     		savefile = new File(System.getProperty("user.dir"), "saved.txt");
 			try{
 				savefile.createNewFile();
