@@ -31,13 +31,9 @@ public class Menu extends JFrame implements ActionListener{
 	
 	editor = this.getContentPane();
 	editor.setLayout(new BoxLayout(editor, BoxLayout.PAGE_AXIS));
-	//editor = setEditable(false);
 
         setUpStyle();
 	setUpAlignment();
-
-	textbox = new JTextField(2);
-	textbox.addActionListener(this);
 
 	String[] sample ={"testing ", "please ", "work ", "before ", "I ", "pass ", "out"};
 	String[] styles = {"regular","italic","bold","small","large","regular","regular"};
@@ -71,11 +67,13 @@ public class Menu extends JFrame implements ActionListener{
 	editor.add(textPane);	
     }
 
+    
+
     public void setUpFont(){
 	GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	fontlist = e.getAllFonts();
 	font = new Font(fontlist[10].getFamily(), Font.PLAIN, size);
-	textbox.setFont(font);
+	textPane.setFont(font);
 
 	String[] listfont = new String[fontlist.length];
 	for(int i = 0; i < fontlist.length; i++){
@@ -141,7 +139,7 @@ public class Menu extends JFrame implements ActionListener{
 
     }
 
-     protected void addStylesToDocument(StyledDocument doc) {
+    private void addStylesToDocument(StyledDocument doc) {
         //Initialize some styles.
         Style def = StyleContext.getDefaultStyleContext().
                         getStyle(StyleContext.DEFAULT_STYLE);
@@ -174,13 +172,10 @@ public class Menu extends JFrame implements ActionListener{
     }
     
     public void actionPerformed(ActionEvent e){
-	String doc = textPane.getText().substring(current);
-	System.out.println(doc);
-	//bank.add(doc.substring(doc.length()-1),textPane.getText(doc).getName(),0,0);
-	System.out.println(bank);
 	
 	String event = e.getActionCommand();
 	size = 16;
+	int style = 0;
 	
 	if(event.equals("turnB")){
 		String temp = font.getFamily();
@@ -189,9 +184,11 @@ public class Menu extends JFrame implements ActionListener{
 		}
 		else if(!font.isBold() && font.isItalic()){
 			font = new Font(temp, Font.ITALIC + Font.BOLD, size);
+			style = 1;
 		}
 		else if(font.isBold() && font.isItalic()){
 			font = new Font(temp, Font.ITALIC, size);
+			style = 2;
 		}
 		else{
 	    	font = new Font(temp, Font.BOLD, size);
@@ -242,11 +239,24 @@ public class Menu extends JFrame implements ActionListener{
 		}
 		textbox.setFont(font);
 	}
+	
+	if (textPane.getText().getLength() > bank.totalLength()){
+	
+	    String words = textPane.getText().substring(current);
+	    System.out.println(words);
+	    
+
+	    bank.add(words,font,size,style);
+	    System.out.println(bank);
+	}
+
     }
 
     public String wordBank(){
 	return bank.toString();
     }
+
+    
 
     /*
     private static void createAndShowGUI(){

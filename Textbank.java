@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Textbank{
-
+    //change font to be type Font;
     private class Node{
 	private String text,font;
 	private int size,style;
@@ -90,6 +90,16 @@ public class Textbank{
 	return length;
     }
     
+    public int totalLength(){
+	int ans = 0;
+	if (length != 0){
+	    for (Node i: text){
+		ans += i.text().getLength();
+	    }
+	}
+	return ans;
+    }
+
     public String toString(){
 	String ans = "";
 	for (int x = 0; x < length; x++){
