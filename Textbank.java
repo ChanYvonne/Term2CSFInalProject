@@ -66,6 +66,10 @@ public class Textbank{
 	text[length] = null;
     }
 
+    public String getText(int index){
+	return text[index].text();
+    }
+
     public void grow(){ //for if the user is wordy
 	Node[] temp = new Node[length*2+1];
 	for (int x = 0; x < length; x++){

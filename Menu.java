@@ -35,23 +35,22 @@ public class Menu extends JFrame implements ActionListener{
         setUpStyle();
 	setUpAlignment();
 
-	String[] sample ={"testing ", "please ", "work ", "before ", "I ", "pass ", "out"};
-	String[] styles = {"regular","italic","bold","small","large","regular","regular"};
-	
+	//String[] sample ={"testing ", "please ", "work ", "before ", "I ", "pass ", "out"};
+	//String[] styles = {"regular","italic","bold","small","large","regular","regular"};
+	current = doc.getLength();
 	textPane = new JTextPane();
-	textbox.addActionListener(this);
+	//textPane.addActionListener(this);
 	StyledDocument doc = textPane.getStyledDocument();
 	addStylesToDocument(doc);
 
 	try {
-	    for (int i=0; i < sample.length; i++) {
-		doc.insertString(doc.getLength(), sample[i],
-				 doc.getStyle(styles[i]));
+	    for (int i=0; i < bank.getLength(); i++) {
+		doc.insertString(current,bank.get(i),bank.get(i).style());
 	    }
 	} catch (BadLocationException e) {
 	    System.out.println("unable to insert text into text pane.");
 	}
-	current = doc.getLength();
+	
 	size = 16;
 
 	setUpFont();
