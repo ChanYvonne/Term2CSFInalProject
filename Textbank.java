@@ -1,12 +1,13 @@
 import java.util.*;
-
+import java.awt.*;
 public class Textbank{
     //change font to be type Font;
     private class Node{
-	private String text,font;
+	private String text;
+	private Font font;
 	private int size,style;
 
-	public Node(String character,String font, int size, int style){
+	public Node(String character,Font font, int size, int style){
 	    text = character;
 	    this.font = font;
 	    this.size = size;
@@ -17,7 +18,7 @@ public class Textbank{
 	    return text;
 	}
 
-	public String font(){
+	public Font font(){
 	    return font;
 	}
 
@@ -36,7 +37,14 @@ public class Textbank{
 	}
 
 	public void setFont(String f){
-	    font = f;
+	    if (style == 0){
+		font = new Font(f, Font.PLAIN, size);
+	    }else if (style == 1){
+		font = new Font(f, Font.BOLD, size);
+	    }else{
+		font = new Font(f, Font.ITALIC, size);
+	    }
+	    
 	}
 
 	public void setSize(int s){
@@ -61,7 +69,7 @@ public class Textbank{
 	length = 0;
     }
 
-    public void add(String word,String font,int size, int style){
+    public void add(String word,Font font,int size, int style){
 	//System.out.println(text.length);
 	if (length == text.length){
 	  grow();
@@ -94,7 +102,7 @@ public class Textbank{
 	int ans = 0;
 	if (length != 0){
 	    for (Node i: text){
-		ans += i.text().getLength();
+		ans += i.text().length();
 	    }
 	}
 	return ans;
@@ -112,11 +120,12 @@ public class Textbank{
     // for some reason when I print test, it doesn't print out the text() of nodes I added
     public static void main(String[] args){
 	Textbank test = new Textbank();
-	test.add("hello","Times New Roman", 14, 0);
-	test.add("my","Times New Roman", 14, 0);
-	test.add("textbox","Times New Roman", 14, 0);
-	test.add("please","Times New Roman", 14, 0);
-	test.add("work","Times New Roman", 14, 0);
+	Font test2 = new Font("Courier",Font.PLAIN,16);
+	test.add("hello",test2, 14, 0);
+	test.add("my",test2, 14, 0);
+	test.add("textbox",test2, 14, 0);
+	test.add("please",test2, 14, 0);
+	test.add("work",test2, 14, 0);
 	System.out.println(test.getLength());
 	System.out.println(test.toString());
     }
