@@ -5,13 +5,10 @@ public class Textbank{
     private class Node{
 	private String text;
 	private Font font;
-	private int size,style;
 
-	public Node(String character,Font font, int size, int style){
+	public Node(String character,Font font){
 	    text = character;
 	    this.font = font;
-	    this.size = size;
-	    this.style = style;
 	}
 
 	public String text(){
@@ -23,11 +20,11 @@ public class Textbank{
 	}
 
 	public int size(){
-	    return size;
+	    return font.getSize();
 	}
 
 	public int style(){
-	    return style;
+	    return font.getStyle();
 	}
 
 	//set methods for later so we can change only certain parts of the text
@@ -36,26 +33,9 @@ public class Textbank{
 	    text = character;
 	}
 
-	public void setFont(String f){
-	    if (style == 0){
-		font = new Font(f, Font.PLAIN, size);
-	    }else if (style == 1){
-		font = new Font(f, Font.BOLD, size);
-	    }else{
-		font = new Font(f, Font.ITALIC, size);
-	    }
-	    
-	}
-
-	public void setSize(int s){
-	    size = s;
-	}
-
-	public void setStyle(int st){
-	    style = st;
-	}
-
-	
+	public void setFont(Font f){
+	    font = new Font(f.getFamily(), f.getStyle(), font.getSize());
+	}	
     }
     
     private Node[] text;
@@ -69,12 +49,12 @@ public class Textbank{
 	length = 0;
     }
 
-    public void add(String word,Font font,int size, int style){
+    public void add(String word,Font font){
 	//System.out.println(text.length);
 	if (length == text.length){
 	  grow();
 	}
-	text[length] = new Node(word,font,size,style);
+	text[length] = new Node(word,font);
 	length++;
     }
 
@@ -121,11 +101,11 @@ public class Textbank{
     public static void main(String[] args){
 	Textbank test = new Textbank();
 	Font test2 = new Font("Courier",Font.PLAIN,16);
-	test.add("hello",test2, 14, 0);
-	test.add("my",test2, 14, 0);
-	test.add("textbox",test2, 14, 0);
-	test.add("please",test2, 14, 0);
-	test.add("work",test2, 14, 0);
+	test.add("hello",test2);
+	test.add("my",test2);
+	test.add("textbox",test2);
+	test.add("please",test2);
+	test.add("work",test2);
 	System.out.println(test.getLength());
 	System.out.println(test.toString());
     }
