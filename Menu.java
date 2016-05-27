@@ -21,6 +21,7 @@ public class Menu extends JFrame implements ActionListener{
     private JMenu filemenu;
     private JMenuItem save, saveAs;
     private File savefile;
+    private String currentFile;
     
 
     public Menu(){
@@ -200,6 +201,10 @@ public class Menu extends JFrame implements ActionListener{
 	else if(event.equals("Save")){
 		save(false);
 	}
+	else if(event.equals("savefile")){
+	    System.out.println("BIG BUTTON!");
+	}
+		
 	else{
 		if(font.isPlain()){
 			font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(), Font.PLAIN, size);
@@ -227,11 +232,18 @@ public class Menu extends JFrame implements ActionListener{
 	    saveas.setTitle("Save As...");
 	    saveas.setSize(640, 480);
 	    saveas.setLocation(200, 100);
-    		saveas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    saveas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     		saveas.setVisible(true);
-		TreeModel model = new FileTreeModel(new File(System.getProperty("user.dir")));
-		JTree tree = new JTree(model);
-		saveas.add(tree);
+		JTextField filenamebox = new JTextField("Type your filename here.", 10);
+		filenamebox.addActionListener(this);
+		JButton save = new JButton("Save");
+		save.addActionListener(this);
+		save.setActionCommand("savefile");
+		saveas.add(filenamebox);
+		saveas.add(save);
+		Container savepane = saveas.getContentPane();
+		savepane.setLayout(new BoxLayout(savepane, BoxLayout.PAGE_AXIS));
+		savepane.add(saveas, BorderLayout.CENTER);
 		
     	}
     	else{
