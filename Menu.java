@@ -8,14 +8,13 @@ import javax.swing.undo.*;
 @SuppressWarnings("unchecked")
 public class Menu extends JFrame implements ActionListener{
     private Container editor;
-    private JTextField textbox;
     private JTextPane textPane;
     private JButton bold,italic;
     private JRadioButton lalign,center,ralign;
     private ButtonGroup alignment;
     private Font font;    
     private Font[] fontlist;
-    private int size,current;
+    private int size,caretPosition;
     private JComboBox fontselect, textsize;
     private Textbank bank;
 
@@ -33,19 +32,19 @@ public class Menu extends JFrame implements ActionListener{
 	editor.setLayout(new BoxLayout(editor, BoxLayout.PAGE_AXIS));
 
         setUpStyle();
-	setUpAlignment();
+	//setUpAlignment();
 
 	//String[] sample ={"testing ", "please ", "work ", "before ", "I ", "pass ", "out"};
 	//String[] styles = {"regular","italic","bold","small","large","regular","regular"};
-	current = doc.getLength();
+	
 	textPane = new JTextPane();
 	//textPane.addActionListener(this);
 	StyledDocument doc = textPane.getStyledDocument();
 	addStylesToDocument(doc);
-
+	caretPosition = doc.getLength();
 	try {
 	    for (int i=0; i < bank.getLength(); i++) {
-		doc.insertString(current,bank.get(i),bank.get(i).style());
+		doc.insertString(caretPosition,bank.getText(i),doc.getStyle(convertStyles(i)));
 	    }
 	} catch (BadLocationException e) {
 	    System.out.println("unable to insert text into text pane.");
@@ -84,9 +83,11 @@ public class Menu extends JFrame implements ActionListener{
 	fontselect.setEditable(true);
 	fontselect.setPreferredSize(new Dimension(225,25));
 	fontselect.setMaximumSize(fontselect.getPreferredSize());
+	fontselect.setActionCommand("font");
 	fontselect.addActionListener(this);
     }
 
+    /*
     public void setUpAlignment(){
 	alignment = new ButtonGroup();
 	
@@ -108,6 +109,7 @@ public class Menu extends JFrame implements ActionListener{
 	alignment.add(ralign);
 
     }
+    */
 
     public void setUpStyle(){
 	bold = new JButton("bold");
@@ -138,14 +140,31 @@ public class Menu extends JFrame implements ActionListener{
 
     }
 
+    // converts int format of font class to intialized styles documentation
+    private String convertStyles(int index){
+	if (index > 0 && index < bank.getLength()){
+	    int tempStyle = bank.getStyle(index);
+	    if (tempStyle == Font.BOLD){
+		return "bold";
+	    }else if (tempStyle == Font.ITALIC){
+		return "italic";
+	    }else{
+		return "regular";
+	    }
+	}
+	return "";
+    }
+
     private void addStylesToDocument(StyledDocument doc) {
-        //Initialize some styles.
+        //Initialize some styles and fonts
         Style def = StyleContext.getDefaultStyleContext().
                         getStyle(StyleContext.DEFAULT_STYLE);
 
         Style regular = doc.addStyle("regular", def);
-        StyleConstants.setFontFamily(def, "SansSerif");
+        StyleConstants.setFontFamily(def,"Arial");
+				     //fontlist[fontselect.getSelectedIndex()].getFamily());
 
+	
         Style s = doc.addStyle("italic", regular);
         StyleConstants.setItalic(s, true);
 
@@ -158,96 +177,91 @@ public class Menu extends JFrame implements ActionListener{
         s = doc.addStyle("large", regular);
         StyleConstants.setFontSize(s, 16);
 
-        s = doc.addStyle("button", regular);
+	s = doc.addStyle("size", regular);
+	StyleConstants.setFontSize(s, 30);
+				   //textsize.getSelectedIndex());
+
+	alignment = new ButtonGroup();
+	
+        s = doc.addStyle("center", regular);
         StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
-       
-        JButton button = new JButton();
-	button.setText("BEEP");
-        button.setCursor(Cursor.getDefaultCursor());
-        button.setMargin(new Insets(0,0,0,0));
-        button.setActionCommand("Jbutton");
-        button.addActionListener(this);
-        StyleConstants.setComponent(s, button);
+
+	center = new JRadioButton("Center");
+	center.setActionCommand("Center");
+	center.addActionListener(this);
+	StyleConstants.setComponent(s, center);
+
+	s = doc.addStyle("left", regular);
+	StyleConstants.setAlignment(s, StyleConstants.ALIGN_LEFT);
+	
+	lalign = new JRadioButton("Left-aligned");
+	lalign.setActionCommand("Left-aligned");
+	lalign.addActionListener(this);
+	lalign.setSelected(true);
+	StyleConstants.setComponent(s, lalign);
+
+	s = doc.addStyle("right", regular);
+	StyleConstants.setAlignment(s, StyleConstants.ALIGN_RIGHT);
+	
+	ralign = new JRadioButton("Right-aligned");
+	ralign.setActionCommand("Right-aligned");
+	ralign.addActionListener(this);
+	StyleConstants.setComponent(s, ralign);
+
+	alignment.add(lalign);
+	alignment.add(center);
+	alignment.add(ralign);    
     }
     
     public void actionPerformed(ActionEvent e){
 	
 	String event = e.getActionCommand();
 	size = 16;
-	int style = 0;
+	StyledDocument doc = textPane.getStyledDocument();
+	addStylesToDocument(doc);
+	int newStyle = 0;
 	
 	if(event.equals("turnB")){
-		String temp = font.getFamily();
-		if(font.isBold() && !font.isItalic()){
-			font = new Font(temp, Font.PLAIN, size);
-		}
-		else if(!font.isBold() && font.isItalic()){
-			font = new Font(temp, Font.ITALIC + Font.BOLD, size);
-			style = 1;
-		}
-		else if(font.isBold() && font.isItalic()){
-			font = new Font(temp, Font.ITALIC, size);
-			style = 2;
-		}
-		else{
-	    	font = new Font(temp, Font.BOLD, size);
-	    }
-	    textbox.setFont(font);
-	}
-	else if(event.equals("turnI")){
-		String temp = font.getFamily();
-		if(font.isItalic() && !font.isBold()){
-			font = new Font(temp, Font.PLAIN, size);
-		}
-		else if(!font.isItalic() && font.isBold()){
-			font = new Font(temp, Font.BOLD + Font.ITALIC, size);
-		}
-		else if(font.isItalic() && font.isBold()){
-			font = new Font(temp, Font.BOLD, size);
-		}
-		else{
-	    	font = new Font(temp, Font.ITALIC, size);
-	    }
-	    textbox.setFont(font);
+	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("bold"),false);
+	    newStyle = 1;
+	}else if(event.equals("turnI")){
+	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("italic"),false);
+	    newStyle = 2;
     	}
 	else if (event.equals("Left-aligned")){
-	    //alignment.setSelected(getSelection(),false);
 	    lalign.setSelected(true);
-	    textbox.setHorizontalAlignment(JTextField.LEFT);
+	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("left"),false);
 	}else if (event.equals("Right-aligned")){
-	    //alignment.setSelected(getSelection(),false);
 	    ralign.setSelected(true);
-	    textbox.setHorizontalAlignment(JTextField.RIGHT);
+	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("right"),false);
 	}else if (event.equals("Center")){
-	    //alignment.setSelected(getSelection(),false);
 	    center.setSelected(true);
-	    textbox.setHorizontalAlignment(JTextField.CENTER);
+	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("center"),false);
+	}else if (event.equals("font")){
+	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("regular"),false);
+	     
+	}else{
+	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("size"),false);
+	    size = textsize.getSelectedIndex();
 	}
-	else{
-		if(font.isPlain()){
-			font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(), Font.PLAIN, size);
-		}
-		else if(font.isBold() && !font.isItalic()){
-			font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(), Font.BOLD, size);
-		}
-		else if(font.isItalic() && !font.isBold()){
-			font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(), Font.ITALIC, size);
-		}
-		else if(font.isBold() && font.isItalic()){
-			font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(), Font.BOLD + Font.ITALIC, size);
-		}
-		textbox.setFont(font);
+	if (newStyle == 0){
+	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.PLAIN , size);
+	}else if (newStyle == 1){
+	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.BOLD , size);
+	}else{
+	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
 	
-	if (textPane.getText().getLength() > bank.totalLength()){
+	if (textPane.getText().length() > bank.totalLength()){
 	
-	    String words = textPane.getText().substring(current);
+	    String words = textPane.getText().substring(caretPosition);
 	    System.out.println(words);
 	    
 
-	    bank.add(words,font,size,style);
+	    bank.add(words,new Font(font.getFamily(),font.getStyle(),size));
 	    System.out.println(bank);
 	}
+
 
     }
 
