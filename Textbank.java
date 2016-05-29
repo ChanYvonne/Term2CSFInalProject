@@ -70,6 +70,15 @@ public class Textbank{
 	return text[index].text();
     }
 
+    
+    public int getStyle(int index){
+	return text[index].style();
+    }
+
+    public int getSize(int index){
+	return text[index].size();
+    }
+    
     public void grow(){ //for if the user is wordy
 	Node[] temp = new Node[length*2+1];
 	for (int x = 0; x < length; x++){
