@@ -22,6 +22,7 @@ public class Menu extends JFrame implements ActionListener{
     private JMenuItem save, saveAs;
     private File savefile;
     private String currentFile;
+    private JTextField filenamebox;
     
 
     public Menu(){
@@ -202,7 +203,8 @@ public class Menu extends JFrame implements ActionListener{
 		save(false);
 	}
 	else if(event.equals("savefile")){
-	    System.out.println("BIG BUTTON!");
+		currentFile = filenamebox.getText();
+	    save(false);
 	}
 		
 	else{
@@ -230,11 +232,11 @@ public class Menu extends JFrame implements ActionListener{
     	if(as){
 	    JFrame saveas = new JFrame();
 	    saveas.setTitle("Save As...");
-	    saveas.setSize(640, 480);
+	    saveas.setSize(200, 100);
 	    saveas.setLocation(200, 100);
 	    saveas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     		saveas.setVisible(true);
-		JTextField filenamebox = new JTextField("Type your filename here.", 10);
+		filenamebox = new JTextField("Type your filename here.", 10);
 		filenamebox.addActionListener(this);
 		JButton save = new JButton("Save");
 		save.addActionListener(this);
@@ -243,12 +245,13 @@ public class Menu extends JFrame implements ActionListener{
 		saveas.add(save);
 		Container savepane = saveas.getContentPane();
 		savepane.setLayout(new BoxLayout(savepane, BoxLayout.PAGE_AXIS));
-		savepane.add(saveas, BorderLayout.CENTER);
-		
     	}
     	else{
 	    /*look up how to save a pdf file, would be useful for printing*/
-    		savefile = new File(System.getProperty("user.dir"), "saved.txt");
+	    	if(currentFile == null){
+	    		save(true);
+	    	}
+    		savefile = new File(System.getProperty("user.dir"), currentFile + ".txt");
 			try{
 				savefile.createNewFile();
 				FileWriter writer = new FileWriter(savefile);
