@@ -17,6 +17,7 @@ public class Menu extends JFrame implements ActionListener{
     private int size,caretPosition;
     private JComboBox fontselect, textsize;
     private Textbank bank;
+    private boolean BoldOn, ItalicOn;
 
     public Menu(){
 	
@@ -32,16 +33,18 @@ public class Menu extends JFrame implements ActionListener{
 	editor.setLayout(new BoxLayout(editor, BoxLayout.PAGE_AXIS));
 
         setUpStyle();
-	//setUpAlignment();
+	setUpAlignment();
 
 	//String[] sample ={"testing ", "please ", "work ", "before ", "I ", "pass ", "out"};
 	//String[] styles = {"regular","italic","bold","small","large","regular","regular"};
-	
 	textPane = new JTextPane();
+	setUpFont();
+	setUpSize();
 	//textPane.addActionListener(this);
 	StyledDocument doc = textPane.getStyledDocument();
 	addStylesToDocument(doc);
 	caretPosition = doc.getLength();
+	
 	try {
 	    for (int i=0; i < bank.getLength(); i++) {
 		doc.insertString(caretPosition,bank.getText(i),doc.getStyle(convertStyles(i)));
@@ -50,10 +53,10 @@ public class Menu extends JFrame implements ActionListener{
 	    System.out.println("unable to insert text into text pane.");
 	}
 	
-	size = 16;
+	
 
-	setUpFont();
-	setUpSize();
+	
+	
 		
 	editor.add(bold);
 	editor.add(italic);
@@ -87,7 +90,7 @@ public class Menu extends JFrame implements ActionListener{
 	fontselect.addActionListener(this);
     }
 
-    /*
+    
     public void setUpAlignment(){
 	alignment = new ButtonGroup();
 	
@@ -109,9 +112,12 @@ public class Menu extends JFrame implements ActionListener{
 	alignment.add(ralign);
 
     }
-    */
+    
 
     public void setUpStyle(){
+	BoldOn = false;
+	ItalicOn = false;
+	
 	bold = new JButton("bold");
 	bold.addActionListener(this);
 	bold.setActionCommand("turnB");
@@ -133,6 +139,7 @@ public class Menu extends JFrame implements ActionListener{
 
 	textsize = new JComboBox(sizelist);
 	textsize.setSelectedIndex(2);
+	size = 20;
 	textsize.setEditable(true);
 	textsize.setPreferredSize(new Dimension(50,25));
         textsize.setMaximumSize(textsize.getPreferredSize());
@@ -160,57 +167,42 @@ public class Menu extends JFrame implements ActionListener{
         Style def = StyleContext.getDefaultStyleContext().
                         getStyle(StyleContext.DEFAULT_STYLE);
 
+	String fontname = fontlist[fontselect.getSelectedIndex()].getFamily();
         Style regular = doc.addStyle("regular", def);
-        StyleConstants.setFontFamily(def,"Arial");
-				     //fontlist[fontselect.getSelectedIndex()].getFamily());
-
-	
+        StyleConstants.setFontFamily(def,fontname);
+       
         Style s = doc.addStyle("italic", regular);
         StyleConstants.setItalic(s, true);
 
         s = doc.addStyle("bold", regular);
         StyleConstants.setBold(s, true);
 
-        s = doc.addStyle("small", regular);
-        StyleConstants.setFontSize(s, 10);
+	s = doc.addStyle("plain", regular);
+	StyleConstants.setBold(s, false);
+	StyleConstants.setItalic(s, false);
 
-        s = doc.addStyle("large", regular);
-        StyleConstants.setFontSize(s, 16);
-
+	int newsize = 12 + 4*textsize.getSelectedIndex();
 	s = doc.addStyle("size", regular);
-	StyleConstants.setFontSize(s, 30);
-				   //textsize.getSelectedIndex());
-
-	alignment = new ButtonGroup();
+	StyleConstants.setFontSize(s, newsize);
 	
         s = doc.addStyle("center", regular);
         StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
 
-	center = new JRadioButton("Center");
-	center.setActionCommand("Center");
-	center.addActionListener(this);
 	StyleConstants.setComponent(s, center);
 
 	s = doc.addStyle("left", regular);
 	StyleConstants.setAlignment(s, StyleConstants.ALIGN_LEFT);
 	
-	lalign = new JRadioButton("Left-aligned");
-	lalign.setActionCommand("Left-aligned");
-	lalign.addActionListener(this);
-	lalign.setSelected(true);
+	
 	StyleConstants.setComponent(s, lalign);
 
 	s = doc.addStyle("right", regular);
 	StyleConstants.setAlignment(s, StyleConstants.ALIGN_RIGHT);
 	
-	ralign = new JRadioButton("Right-aligned");
-	ralign.setActionCommand("Right-aligned");
-	ralign.addActionListener(this);
+	
 	StyleConstants.setComponent(s, ralign);
 
-	alignment.add(lalign);
-	alignment.add(center);
-	alignment.add(ralign);    
+	
     }
     
     public void actionPerformed(ActionEvent e){
@@ -222,13 +214,26 @@ public class Menu extends JFrame implements ActionListener{
 	int newStyle = 0;
 	
 	if(event.equals("turnB")){
-	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("bold"),false);
-	    newStyle = 1;
+	    if (BoldOn){
+		doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("plain"),false);
+		BoldOn = false;
+	    }else{
+		doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("bold"),false);
+		BoldOn = true;
+		newStyle = 1;
+	    }
+	    
+	    
 	}else if(event.equals("turnI")){
-	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("italic"),false);
-	    newStyle = 2;
-    	}
-	else if (event.equals("Left-aligned")){
+	    if (ItalicOn){
+		doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("plain"),false);
+		ItalicOn = false;
+	    }else{
+		doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("italic"),false);
+		ItalicOn = true;
+		newStyle = 2;
+	    }
+	}else if (event.equals("Left-aligned")){
 	    lalign.setSelected(true);
 	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("left"),false);
 	}else if (event.equals("Right-aligned")){
@@ -244,6 +249,7 @@ public class Menu extends JFrame implements ActionListener{
 	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("size"),false);
 	    size = textsize.getSelectedIndex();
 	}
+	
 	if (newStyle == 0){
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.PLAIN , size);
 	}else if (newStyle == 1){
@@ -252,14 +258,15 @@ public class Menu extends JFrame implements ActionListener{
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
 	
+	
 	if (textPane.getText().length() > bank.totalLength()){
 	
 	    String words = textPane.getText().substring(caretPosition);
-	    System.out.println(words);
+	    //System.out.println(words);
 	    
 
 	    bank.add(words,new Font(font.getFamily(),font.getStyle(),size));
-	    System.out.println(bank);
+	    //System.out.println(bank);
 	}
 
 
