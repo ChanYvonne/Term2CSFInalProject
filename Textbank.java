@@ -1,33 +1,40 @@
 import java.util.*;
-
+import java.awt.*;
 public class Textbank{
-
+    //change font to be type Font;
     private class Node{
-	private String text,font;
-	private int size,style;
+	private String text;
+	private Font font;
 
-	public Node(String character,String font, int size, int style){
+	public Node(String character,Font font){
 	    text = character;
 	    this.font = font;
-	    this.size = size;
-	    this.style = style;
 	}
 
 	public String text(){
 	    return text;
 	}
 
-	public String font(){
+	public Font font(){
 	    return font;
 	}
 
 	public int size(){
-	    return size;
+	    return font.getSize();
 	}
 
 	public int style(){
-	    return style;
+	    return font.getStyle();
 	}
+
+	/*
+	public int getLength(){
+	    if (text != ""){
+		return text.length();
+	    }
+	    return 0;
+	}
+	*/
 
 	//set methods for later so we can change only certain parts of the text
 
@@ -35,19 +42,9 @@ public class Textbank{
 	    text = character;
 	}
 
-	public void setFont(String f){
-	    font = f;
-	}
-
-	public void setSize(int s){
-	    size = s;
-	}
-
-	public void setStyle(int st){
-	    style = st;
-	}
-
-	
+	public void setFont(Font f){
+	    font = new Font(f.getFamily(), f.getStyle(), font.getSize());
+	}	
     }
     
     private Node[] text;
@@ -61,12 +58,12 @@ public class Textbank{
 	length = 0;
     }
 
-    public void add(String word,String font,int size, int style){
+    public void add(String word,Font font){
 	//System.out.println(text.length);
 	if (length == text.length){
 	  grow();
 	}
-	text[length] = new Node(word,font,size,style);
+	text[length] = new Node(word,font);
 	length++;
     }
 
@@ -78,6 +75,19 @@ public class Textbank{
 	text[length] = null;
     }
 
+    public String getText(int index){
+	return text[index].text();
+    }
+
+    
+    public int getStyle(int index){
+	return text[index].style();
+    }
+
+    public int getSize(int index){
+	return text[index].size();
+    }
+    
     public void grow(){ //for if the user is wordy
 	Node[] temp = new Node[length*2+1];
 	for (int x = 0; x < length; x++){
@@ -90,6 +100,16 @@ public class Textbank{
 	return length;
     }
     
+    public int totalLength(){
+	int ans = 0;
+	if (length != 0 && text != null){
+	    for (Node i: text){
+		ans += i.text().length(); //causing null pointer exception
+	    }
+	}
+	return ans;
+    }
+
     public String toString(){
 	String ans = "";
 	for (int x = 0; x < length; x++){
@@ -102,12 +122,13 @@ public class Textbank{
     // for some reason when I print test, it doesn't print out the text() of nodes I added
     public static void main(String[] args){
 	Textbank test = new Textbank();
-	test.add("hello","Times New Roman", 14, 0);
-	test.add("my","Times New Roman", 14, 0);
-	test.add("textbox","Times New Roman", 14, 0);
-	test.add("please","Times New Roman", 14, 0);
-	test.add("work","Times New Roman", 14, 0);
-	System.out.println(test.getLength());
+	Font test2 = new Font("Courier",Font.PLAIN,16);
+	test.add("hello",test2);
+	test.add("my",test2);
+	test.add("textbox",test2);
+	test.add("please",test2);
+	test.add("work",test2);
+	System.out.println(test.totalLength());
 	System.out.println(test.toString());
     }
 }
