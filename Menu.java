@@ -48,7 +48,8 @@ public class Menu extends JFrame implements ActionListener{
 	
 	try {
 	    for (int i=0; i < bank.getLength(); i++) {
-		doc.insertString(caretPosition,bank.getText(i),doc.getStyle(convertStyles(i)));
+		doc.insertString(caretPosition,bank.getText(i),doc.getStyle("regular"));
+		//doc.insertString(caretPosition,bank.getText(i),doc.getStyle(convertStyles(i)));
 	    }
 	} catch (BadLocationException e) {
 	    System.out.println("unable to insert text into text pane.");
@@ -213,13 +214,28 @@ public class Menu extends JFrame implements ActionListener{
 	StyledDocument doc = textPane.getStyledDocument();
 	addStylesToDocument(doc);
 	int newStyle = 0;
+
+	String words = textPane.getText();
+	//System.out.println(words);
+	//doc.insertString(doc.getLength(),words, doc.getStyle("regular"));
+
+	String selected = textPane.getSelectedText();
+	int start = textPane.getSelectionStart();
+	int end = textPane.getSelectionEnd();
+	System.out.println(selected);
+	System.out.println(start);
+	System.out.println(end);
+	if (selected == null){
+	    selected = "";
+	}
+
 	
 	if(event.equals("turnB")){
 	    if (BoldOn){
-		doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("plain"),false);
+		doc.setParagraphAttributes(start,end,doc.getStyle("plain"),false);
 		BoldOn = false;
 	    }else{
-		doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("bold"),false);
+		doc.setParagraphAttributes(start,end,doc.getStyle("bold"),false);
 		BoldOn = true;
 		newStyle = 1;
 	    }
@@ -227,29 +243,30 @@ public class Menu extends JFrame implements ActionListener{
 	    
 	}else if(event.equals("turnI")){
 	    if (ItalicOn){
-		doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("plain"),false);
+		doc.setParagraphAttributes(start,end,doc.getStyle("plain"),false);
 		ItalicOn = false;
 	    }else{
-		doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("italic"),false);
+		doc.setParagraphAttributes(start,end,doc.getStyle("italic"),false);
 		ItalicOn = true;
 		newStyle = 2;
 	    }
 	}else if (event.equals("Left-aligned")){
 	    lalign.setSelected(true);
-	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("left"),false);
+	    doc.setParagraphAttributes(start,end,doc.getStyle("left"),false);
 	}else if (event.equals("Right-aligned")){
 	    ralign.setSelected(true);
-	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("right"),false);
+	    doc.setParagraphAttributes(start,end,doc.getStyle("right"),false);
 	}else if (event.equals("Center")){
 	    center.setSelected(true);
-	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("center"),false);
+	    doc.setParagraphAttributes(start, end,doc.getStyle("center"),false);
 	}else if (event.equals("font")){
-	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("regular"),false);
+	    doc.setParagraphAttributes(start,end,doc.getStyle("regular"),false);
 	     
 	}else{
-	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("size"),false);
+	    doc.setParagraphAttributes(start, end,doc.getStyle("size"),false);
 	    size = textsize.getSelectedIndex();
 	}
+        
 	
 	if (newStyle == 0){
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.PLAIN , size);
@@ -259,6 +276,7 @@ public class Menu extends JFrame implements ActionListener{
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
 	
+	/*
 	try{
 	if (textPane.getText().length() > bank.totalLength()){
 	
@@ -269,11 +287,11 @@ public class Menu extends JFrame implements ActionListener{
 	    bank.add(words,new Font(font.getFamily(),font.getStyle(),size));
 	    //System.out.println(bank);
 	}
-}
-catch(NullPointerException x){
-	System.out.println("There is a Null Pointer Exception here. This issue must be addressed, but this is just a quick and dirty fix so the program doesn't absolutely halt.");
-}
-
+	}
+	catch(NullPointerException x){
+	    System.out.println("There is a Null Pointer Exception here. This issue must be addressed, but this is just a quick and dirty fix so the program doesn't absolutely halt.");
+	}
+	*/
 
     }
 
@@ -291,7 +309,7 @@ catch(NullPointerException x){
 
     public static void main(String[] args){
 	Menu test = new Menu();
-	System.out.println(test.wordBank());
+	//System.out.println(test.wordBank());
 	test.setVisible(true);
     }
     
