@@ -14,7 +14,7 @@ public class Menu extends JFrame implements ActionListener{
     private ButtonGroup alignment;
     private Font font;    
     private Font[] fontlist;
-    private int size,caretPosition;
+    private int size,caretPosition, prevPosition;
     private JComboBox fontselect, textsize;
     private Textbank bank;
     private boolean BoldOn, ItalicOn;
@@ -38,6 +38,7 @@ public class Menu extends JFrame implements ActionListener{
 	//String[] sample ={"testing ", "please ", "work ", "before ", "I ", "pass ", "out"};
 	//String[] styles = {"regular","italic","bold","small","large","regular","regular"};
 	textPane = new JTextPane();
+	textPane.setEditable(true);
 	setUpFont();
 	setUpSize();
 	//textPane.addActionListener(this);
@@ -286,6 +287,7 @@ public class Menu extends JFrame implements ActionListener{
 
     public static void main(String[] args){
 	Menu test = new Menu();
+	System.out.println(test.wordBank());
 	test.setVisible(true);
     }
     
