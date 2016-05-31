@@ -27,6 +27,15 @@ public class Textbank{
 	    return font.getStyle();
 	}
 
+	/*
+	public int getLength(){
+	    if (text != ""){
+		return text.length();
+	    }
+	    return 0;
+	}
+	*/
+
 	//set methods for later so we can change only certain parts of the text
 
 	public void setText(String character){
@@ -93,9 +102,9 @@ public class Textbank{
     
     public int totalLength(){
 	int ans = 0;
-	if (length != 0){
+	if (length != 0 && text != null){
 	    for (Node i: text){
-		ans += i.text().length();
+		ans += i.text().length(); //causing null pointer exception
 	    }
 	}
 	return ans;
@@ -119,7 +128,7 @@ public class Textbank{
 	test.add("textbox",test2);
 	test.add("please",test2);
 	test.add("work",test2);
-	System.out.println(test.getLength());
+	System.out.println(test.totalLength());
 	System.out.println(test.toString());
     }
 }
