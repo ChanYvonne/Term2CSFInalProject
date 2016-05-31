@@ -259,7 +259,7 @@ public class Menu extends JFrame implements ActionListener{
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
 	
-	
+	try{
 	if (textPane.getText().length() > bank.totalLength()){
 	
 	    String words = textPane.getText().substring(caretPosition);
@@ -269,6 +269,10 @@ public class Menu extends JFrame implements ActionListener{
 	    bank.add(words,new Font(font.getFamily(),font.getStyle(),size));
 	    //System.out.println(bank);
 	}
+}
+catch(NullPointerException x){
+	System.out.println("There is a Null Pointer Exception here. This issue must be addressed, but this is just a quick and dirty fix so the program doesn't absolutely halt.");
+}
 
 
     }
