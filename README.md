@@ -17,10 +17,17 @@ Ideas to possibly implement later (WAY later):
 
 #Start here when updating the readme. I will fix the version numbering later.
 
+05-30-16
+Version 0.4.0
+Sammy-Saving is a thing now!
+Only saves as a text file. Can't open files either....
+
 05-21-16/05-20-16
+Version 0.3.0
 Yvonne - created a textbox to be implemented in the GUI (using an array of nodes to keep track of properties of each character)
 
 05-19-16
+Version 0.2.2
 Yvonne - adjusted size and orientation of dropdown menu. Made it editable so users can type in desired font for easy access.
        - created new drop down menu to adjust the size of text
 
