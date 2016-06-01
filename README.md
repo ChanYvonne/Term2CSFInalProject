@@ -1,6 +1,6 @@
 # Term2CSFInalProject
 
-Team Name: TBD (Word Masters?)
+Team Name: Word Masters
 
 Project Name: Wizarding Word of Java
 Description: Our project is essentially a word processor in GUI form. Users will be able to accomplish the following in our text editor:
@@ -17,12 +17,43 @@ Ideas to possibly implement later (WAY later):
 
 #Start here when updating the readme. I will fix the version numbering later.
 
+
+
 05-30-16
 Version 0.4.0
 Sammy-Saving is a thing now!
 Only saves as a text file. Can't open files either....
+Yvonne - able to grab selected text but somehow I can't change only that part of the text like I could before, even when I select part of text the action changes the whole thing :(  must fix
+       - also realized something is causing null pointer exception in Textbank, don't understand why it is
 
-05-21-16/05-20-16
+05-29-16
+Yvonne - something broke with size selection and font selection and couldn't get it working, also text won't appear until action is performed
+Sammy - helped fix those problems^ yay!
+
+
+05-27-16/05-28-16
+Yvonne - reformatted Textbank and nodes to only contain the String text and Font (which keeps track of the style and size as well)
+
+05-26-16
+Yvonne - continued working on changing specific parts of the text, got it working if I change each character/string manually in the code beforehand -- just have to get it working in realtime and making sure it updates
+
+05-25-16
+Yvonne - finally able able to obtain text in the textPane by utilizing position of caret(cursor) on the screen
+
+05-24-16
+Yvonne - mostly a research day to find alternatives to JTextField, tested a bunch of sample code to see what works best
+       - found JTextPane and began replacing JTextField with that!
+Sammy - began work on saving and saving as
+
+05-23-16
+Yvonne - changed name of textbox to textbank as to avoid confusion and began integrating textbank into the main Menu.java
+       - found out we must replace JTextField since it is incapable of doing what we need it to do
+*I realize the names are a bit confusing, please bare with me...
+
+05-22-16
+Yvonne - continued working on textbox to keep track of what is written, and each character's properties (i.e. its style, font, size)
+
+05-20-16/05-21-16
 Version 0.3.0
 Yvonne - created a textbox to be implemented in the GUI (using an array of nodes to keep track of properties of each character)
 
