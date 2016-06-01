@@ -44,23 +44,35 @@ public class Menu extends JFrame implements ActionListener{
 	
 	editor = this.getContentPane();
 	editor.setLayout(new BoxLayout(editor, BoxLayout.PAGE_AXIS));
-
-        setUpStyle();
+	textPane = new JTextPane();
+	
 	setUpAlignment();
+	setUpTextPane();
+	setUpFont();
+	setUpSize();	
+	setUpSave();
+	setUpStyle();
+	
+	
+	editor.add(bold);
+	editor.add(italic);
+	editor.add(lalign);
+	editor.add(center);
+	editor.add(ralign);
+	editor.add(textsize);
+	editor.add(fontselect);
+	editor.add(textPane);	
+    }
 
+    public void setUpTextPane(){
 	//String[] sample ={"testing ", "please ", "work ", "before ", "I ", "pass ", "out"};
 	//String[] styles = {"regular","italic","bold","small","large","regular","regular"};
-	textPane = new JTextPane();
-	textPane.setEditable(true);
-	setUpFont();
-	setUpSize();
-
+	//textPane.setEditable(true);
 	
-
-	//textPane.addActionListener(this);
 	StyledDocument doc = textPane.getStyledDocument();
 	addStylesToDocument(doc);
 	caretPosition = doc.getLength();
+	doc.setParagraphAttributes(0,caretPosition, doc.getStyle("regular"),false);
 	
 	try {
 	    for (int i=0; i < bank.getLength(); i++) {
@@ -71,16 +83,6 @@ public class Menu extends JFrame implements ActionListener{
 	    System.out.println("unable to insert text into text pane.");
 	}
 	
-	setUpSave();
-		
-	editor.add(bold);
-	editor.add(italic);
-	editor.add(lalign);
-	editor.add(center);
-	editor.add(ralign);
-	editor.add(textsize);
-	editor.add(fontselect);
-	editor.add(textPane);	
     }
 
     public void setUpSave(){
@@ -194,7 +196,12 @@ public class Menu extends JFrame implements ActionListener{
         Style def = StyleContext.getDefaultStyleContext().
                         getStyle(StyleContext.DEFAULT_STYLE);
 
-	String fontname = fontlist[fontselect.getSelectedIndex()].getFamily();
+	String fontname;
+	if (fontlist == null){
+	    fontname = "Arial";
+	}else{
+	    fontname = fontlist[fontselect.getSelectedIndex()].getFamily();
+	}
         Style regular = doc.addStyle("regular", def);
         StyleConstants.setFontFamily(def,fontname);
        
@@ -208,7 +215,13 @@ public class Menu extends JFrame implements ActionListener{
 	StyleConstants.setBold(s, false);
 	StyleConstants.setItalic(s, false);
 
-	int newsize = 12 + 4*textsize.getSelectedIndex();
+	int newsize;
+	if (textsize == null){
+	    newsize = 20;
+	}else{
+	    newsize = 12 + 4*textsize.getSelectedIndex();
+	}
+	
 	s = doc.addStyle("size", regular);
 	StyleConstants.setFontSize(s, newsize);
 	
@@ -233,10 +246,11 @@ public class Menu extends JFrame implements ActionListener{
     }
     
     public void actionPerformed(ActionEvent e){
-
+	
+	
         String words = textPane.getText();
 	try{
-	    bank.add(words.substring(words.length()-1),new Font(font.getFamily(),font.getStyle(),size));
+	    bank.add(words.substring(caretPosition),new Font(font.getFamily(),font.getStyle(),size));
 	}
 	catch(IndexOutOfBoundsException i){
 		System.out.println("There is no text.");
