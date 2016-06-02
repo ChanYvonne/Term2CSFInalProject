@@ -3,15 +3,17 @@ import java.awt.*;
 public class Textbank{
     //change font to be type Font;
     private class Node{
-	private String text;
+	private char text;
 	private Font font;
+	private int alignment;
 
-	public Node(String character,Font font){
+	public Node(char character,Font font, int align){
 	    text = character;
 	    this.font = font;
+	    alignment = align;
 	}
 
-	public String text(){
+	public char text(){
 	    return text;
 	}
 
@@ -27,6 +29,10 @@ public class Textbank{
 	    return font.getStyle();
 	}
 
+	public int alignment(){
+	    return alignment;
+	}
+
 	/*
 	public int getLength(){
 	    if (text != ""){
@@ -38,7 +44,7 @@ public class Textbank{
 
 	//set methods for later so we can change only certain parts of the text
 
-	public void setText(String character){
+	public void setText(char character){
 	    text = character;
 	}
 
@@ -58,12 +64,18 @@ public class Textbank{
 	length = 0;
     }
 
-    public void add(String word,Font font){
+    public void add(char word,Font font,String align){
 	//System.out.println(text.length);
 	if (length == text.length){
 	  grow();
 	}
-	text[length] = new Node(word,font);
+	int alignment = 0;
+	if (align.equals("center")){
+	    alignment = 1;
+	}else if (align.equals("right")){
+	    alignment = 2;
+	}
+	text[length] = new Node(word,font,alignment);
 	length++;
     }
 
@@ -75,7 +87,7 @@ public class Textbank{
 	text[length] = null;
     }
 
-    public String getText(int index){
+    public char getText(int index){
 	return text[index].text();
     }
 
@@ -86,6 +98,17 @@ public class Textbank{
 
     public int getSize(int index){
 	return text[index].size();
+    }
+
+    public String getAlignment(int index){
+	int temp = text[index].alignment();
+	if (temp == 0){
+	    return "left";
+	}else if(temp == 1){
+	    return "center";
+	}else{
+	    return "right";
+	}
     }
     
     public void grow(){ //for if the user is wordy
@@ -100,6 +123,7 @@ public class Textbank{
 	return length;
     }
     
+    /*
     public int totalLength(){
 	int ans = 0;
 	if (length != 0 && text != null){
@@ -109,6 +133,7 @@ public class Textbank{
 	}
 	return ans;
     }
+    */
 
     public String toString(){
 	String ans = "";
@@ -123,12 +148,12 @@ public class Textbank{
     public static void main(String[] args){
 	Textbank test = new Textbank();
 	Font test2 = new Font("Courier",Font.PLAIN,16);
-	test.add("hello",test2);
-	test.add("my",test2);
-	test.add("textbox",test2);
-	test.add("please",test2);
-	test.add("work",test2);
-	System.out.println(test.totalLength());
+	test.add('h',test2,"center");
+	test.add('e',test2,"right");
+	test.add('l',test2, "center");
+	test.add('l',test2,"left");
+	test.add('o',test2,"right");
+	System.out.println(test.getLength());
 	System.out.println(test.toString());
     }
 }

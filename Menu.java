@@ -75,7 +75,7 @@ public class Menu extends JFrame implements ActionListener{
 	
 	try {
 	    for (int i=0; i < bank.getLength(); i++) {
-		doc.insertString(caretPosition,bank.getText(i),doc.getStyle("regular"));
+		doc.insertString(caretPosition,String.valueOf(bank.getText(i)),doc.getStyle("regular"));
 		//doc.insertString(caretPosition,bank.getText(i),doc.getStyle(convertStyles(i)));
 	    }
 	} catch (BadLocationException e) {
@@ -299,13 +299,13 @@ public class Menu extends JFrame implements ActionListener{
 	    }
 	}else if (event.equals("Left-aligned")){
 	    lalign.setSelected(true);
-	    doc.setCharacterAttributes(start,end,doc.getStyle("left"),false);
+	    doc.setCharacterAttributes(0,doc.getLength(),doc.getStyle("left"),false);
 	}else if (event.equals("Right-aligned")){
 	    ralign.setSelected(true);
-	    doc.setCharacterAttributes(start,end,doc.getStyle("right"),false);
+	    doc.setCharacterAttributes(0,doc.getLength(),doc.getStyle("right"),false);
 	}else if (event.equals("Center")){
 	    center.setSelected(true);
-	    doc.setCharacterAttributes(start, end,doc.getStyle("center"),false);
+	    doc.setCharacterAttributes(0, doc.getLength(),doc.getStyle("center"),false);
 	}else if (event.equals("font")){
 	    doc.setCharacterAttributes(start,end,doc.getStyle("regular"),false);
 	}else if(event.equals("SaveAs")){
@@ -329,7 +329,7 @@ public class Menu extends JFrame implements ActionListener{
 	}else{
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
-		
+	
 
 	/*
 	try{
