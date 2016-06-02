@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -280,10 +279,10 @@ public class Menu extends JFrame implements ActionListener{
 	
 	if(event.equals("turnB")){
 	    if (BoldOn){
-		doc.setParagraphAttributes(start,end,doc.getStyle("plain"),false);
+		doc.setCharacterAttributes(start,end,doc.getStyle("plain"),false);
 		BoldOn = false;
 	    }else{
-		doc.setParagraphAttributes(start,end,doc.getStyle("bold"),false);
+		doc.setCharacterAttributes(start,end,doc.getStyle("bold"),false);
 		BoldOn = true;
 		newStyle = 1;
 	    }
@@ -291,24 +290,24 @@ public class Menu extends JFrame implements ActionListener{
 	    
 	}else if(event.equals("turnI")){
 	    if (ItalicOn){
-		doc.setParagraphAttributes(start,end,doc.getStyle("plain"),false);
+		doc.setCharacterAttributes(start,end,doc.getStyle("plain"),false);
 		ItalicOn = false;
 	    }else{
-		doc.setParagraphAttributes(start,end,doc.getStyle("italic"),false);
+		doc.setCharacterAttributes(start,end,doc.getStyle("italic"),false);
 		ItalicOn = true;
 		newStyle = 2;
 	    }
 	}else if (event.equals("Left-aligned")){
 	    lalign.setSelected(true);
-	    doc.setParagraphAttributes(start,end,doc.getStyle("left"),false);
+	    doc.setCharacterAttributes(start,end,doc.getStyle("left"),false);
 	}else if (event.equals("Right-aligned")){
 	    ralign.setSelected(true);
-	    doc.setParagraphAttributes(start,end,doc.getStyle("right"),false);
+	    doc.setCharacterAttributes(start,end,doc.getStyle("right"),false);
 	}else if (event.equals("Center")){
 	    center.setSelected(true);
-	    doc.setParagraphAttributes(start, end,doc.getStyle("center"),false);
+	    doc.setCharacterAttributes(start, end,doc.getStyle("center"),false);
 	}else if (event.equals("font")){
-	    doc.setParagraphAttributes(start,end,doc.getStyle("regular"),false);
+	    doc.setCharacterAttributes(start,end,doc.getStyle("regular"),false);
 	}else if(event.equals("SaveAs")){
 		save(true);
 	}
@@ -319,7 +318,7 @@ public class Menu extends JFrame implements ActionListener{
 		currentFile = filenamebox.getText();
 		save(false);
 	}else{
-	    doc.setParagraphAttributes(start, end,doc.getStyle("size"),false);
+	    doc.setCharacterAttributes(start, end,doc.getStyle("size"),false);
 	    size = textsize.getSelectedIndex();
 	}
 	
