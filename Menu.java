@@ -255,9 +255,9 @@ public class Menu extends JFrame implements ActionListener{
 	String selected = textPane.getSelectedText();
 	int start = textPane.getSelectionStart();
 	int end = textPane.getSelectionEnd();
-	System.out.println(selected);
-	System.out.println(start);
-	System.out.println(end);
+	//System.out.println(selected);
+	//System.out.println(start);
+	//System.out.println(end);
 	if (selected == null){
 	    selected = "";
 	}
@@ -283,20 +283,20 @@ public class Menu extends JFrame implements ActionListener{
 		ItalicOn = true;
 		newStyle = 2;
 	    }
+	}else if (event.equals("font")){
+	    doc.setCharacterAttributes(start,end-start,doc.getStyle("regular"),false);
 	}else if (event.equals("Left-aligned")){
 	    lalign.setSelected(true);
-	    doc.setCharacterAttributes(start,end-start,doc.getStyle("left"),false);
+	    doc.setParagraphAttributes(0,doc.getLength(),doc.getStyle("left"),false);
 	    currentalignment = "left";
 	}else if (event.equals("Right-aligned")){
 	    ralign.setSelected(true);
-	    doc.setCharacterAttributes(0,doc.getLength(),doc.getStyle("right"),false);
+	    doc.setParagraphAttributes(0,doc.getLength(),doc.getStyle("right"),false);
 	    currentalignment = "right";
 	}else if (event.equals("Center")){
 	    center.setSelected(true);
-	    doc.setCharacterAttributes(0, doc.getLength(),doc.getStyle("center"),false);
+	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("center"),false);
 	    currentalignment = "center";
-	}else if (event.equals("font")){
-	    doc.setCharacterAttributes(start,end-start,doc.getStyle("regular"),false);
 	}else if(event.equals("SaveAs")){
 		save(true);
 	}
@@ -319,24 +319,29 @@ public class Menu extends JFrame implements ActionListener{
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
 
-	String words = textPane.getText();
-	try{
-	    if (words.length() > bank.getLength()){
-		for (int x = words.length() - bank.getLength(); x < words.length(); x++){
-		    bank.add(words.charAt(x),new Font(font.getFamily(),font.getStyle(),size), currentalignment);
-		}
-	    }
-	}
-	catch(IndexOutOfBoundsException i){
-		System.out.println("There is no text.");
-	}
-	
+	updateBank(size,currentalignment);
     }
 
     public String wordBank(){
 	return bank.toString();
     }
 
+    public void updateBank(int size, String currentalign){
+	String words = textPane.getText();
+	System.out.println(words.length());
+	System.out.println(bank.getLength());
+	try{
+	    for (int x = 0; x < words.length(); x++){
+		//bank.set(words.charAt(x),new Font(font.getFamily(),font.getStyle(),size), currentalign);
+	    }
+	   
+	}
+	catch(IndexOutOfBoundsException i){
+		System.out.println("There is no text.");
+	}
+	
+	System.out.println(wordBank());
+    }
 
     public void save(boolean as){
     	if(as){
@@ -379,7 +384,7 @@ public class Menu extends JFrame implements ActionListener{
 
     public static void main(String[] args){
 	Menu test = new Menu();
-	//System.out.println(test.wordBank());
+	System.out.println(test.wordBank());
 	test.setVisible(true);
     }
     
