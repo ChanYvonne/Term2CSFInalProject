@@ -101,6 +101,7 @@ public class Textbank{
     }
 
     public String getAlignment(int index){
+	//the reason I'm converting the int to string is because it would make it easier to getStyle() of the string
 	int temp = text[index].alignment();
 	if (temp == 0){
 	    return "left";

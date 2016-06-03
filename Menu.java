@@ -226,41 +226,27 @@ public class Menu extends JFrame implements ActionListener{
 	
         s = doc.addStyle("center", regular);
         StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
-
 	StyleConstants.setComponent(s, center);
 
 	s = doc.addStyle("left", regular);
 	StyleConstants.setAlignment(s, StyleConstants.ALIGN_LEFT);
-	
-	
 	StyleConstants.setComponent(s, lalign);
 
 	s = doc.addStyle("right", regular);
 	StyleConstants.setAlignment(s, StyleConstants.ALIGN_RIGHT);
-	
-	
 	StyleConstants.setComponent(s, ralign);
 
 	
     }
     
     public void actionPerformed(ActionEvent e){
-	
-	
-        String words = textPane.getText();
-	try{
-	    bank.add(words.substring(caretPosition),new Font(font.getFamily(),font.getStyle(),size));
-	}
-	catch(IndexOutOfBoundsException i){
-		System.out.println("There is no text.");
-	}
-	
-
+		        
 	String event = e.getActionCommand();
 	size = 16;
 	StyledDocument doc = textPane.getStyledDocument();
 	addStylesToDocument(doc);
 	int newStyle = 0;
+	String currentalignment = "";
 	
 	
 	//System.out.println(words);
@@ -279,10 +265,10 @@ public class Menu extends JFrame implements ActionListener{
 	
 	if(event.equals("turnB")){
 	    if (BoldOn){
-		doc.setCharacterAttributes(start,end,doc.getStyle("plain"),false);
+		doc.setCharacterAttributes(start,end-start,doc.getStyle("plain"),false);
 		BoldOn = false;
 	    }else{
-		doc.setCharacterAttributes(start,end,doc.getStyle("bold"),false);
+		doc.setCharacterAttributes(start,end-start,doc.getStyle("bold"),false);
 		BoldOn = true;
 		newStyle = 1;
 	    }
@@ -290,24 +276,27 @@ public class Menu extends JFrame implements ActionListener{
 	    
 	}else if(event.equals("turnI")){
 	    if (ItalicOn){
-		doc.setCharacterAttributes(start,end,doc.getStyle("plain"),false);
+		doc.setCharacterAttributes(start,end-start,doc.getStyle("plain"),false);
 		ItalicOn = false;
 	    }else{
-		doc.setCharacterAttributes(start,end,doc.getStyle("italic"),false);
+		doc.setCharacterAttributes(start,end-start,doc.getStyle("italic"),false);
 		ItalicOn = true;
 		newStyle = 2;
 	    }
 	}else if (event.equals("Left-aligned")){
 	    lalign.setSelected(true);
-	    doc.setCharacterAttributes(0,doc.getLength(),doc.getStyle("left"),false);
+	    doc.setCharacterAttributes(start,end-start,doc.getStyle("left"),false);
+	    currentalignment = "left";
 	}else if (event.equals("Right-aligned")){
 	    ralign.setSelected(true);
 	    doc.setCharacterAttributes(0,doc.getLength(),doc.getStyle("right"),false);
+	    currentalignment = "right";
 	}else if (event.equals("Center")){
 	    center.setSelected(true);
 	    doc.setCharacterAttributes(0, doc.getLength(),doc.getStyle("center"),false);
+	    currentalignment = "center";
 	}else if (event.equals("font")){
-	    doc.setCharacterAttributes(start,end,doc.getStyle("regular"),false);
+	    doc.setCharacterAttributes(start,end-start,doc.getStyle("regular"),false);
 	}else if(event.equals("SaveAs")){
 		save(true);
 	}
@@ -318,7 +307,7 @@ public class Menu extends JFrame implements ActionListener{
 		currentFile = filenamebox.getText();
 		save(false);
 	}else{
-	    doc.setCharacterAttributes(start, end,doc.getStyle("size"),false);
+	    doc.setCharacterAttributes(start, end-start,doc.getStyle("size"),false);
 	    size = textsize.getSelectedIndex();
 	}
 	
@@ -329,24 +318,19 @@ public class Menu extends JFrame implements ActionListener{
 	}else{
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
-	
 
-	/*
+	String words = textPane.getText();
 	try{
-	if (textPane.getText().length() > bank.totalLength()){
+	    if (words.length() > bank.getLength()){
+		for (int x = words.length() - bank.getLength(); x < words.length(); x++){
+		    bank.add(words.charAt(x),new Font(font.getFamily(),font.getStyle(),size), currentalignment);
+		}
+	    }
+	}
+	catch(IndexOutOfBoundsException i){
+		System.out.println("There is no text.");
+	}
 	
-	    String words = textPane.getText().substring(caretPosition);
-	    //System.out.println(words);
-	    
-
-	    bank.add(words,new Font(font.getFamily(),font.getStyle(),size));
-	    //System.out.println(bank);
-	}
-	catch(NullPointerException x){
-	    System.out.println("There is a Null Pointer Exception here. This issue must be addressed, but this is just a quick and dirty fix so the program doesn't absolutely halt.");
-	}
-	*/
-
     }
 
     public String wordBank(){
