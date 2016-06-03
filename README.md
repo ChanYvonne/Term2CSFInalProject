@@ -17,7 +17,13 @@ Ideas to possibly implement later (WAY later):
 
 #Start here when updating the readme. I will fix the version numbering later.
 
+06-01-16/06-02-16
+Yvonne & Sammy - fixed problem of changing the whole text when only parts are selected (turned out to be a VERY minor error)
+Yvonne - modified textbank to keep track of each character of the text instead of the only the strings added each time
+*encountered a problem of aligment buttons disappearing after being selected :(
 
+05-31-16
+Yvonne - fixed the problem of text not appearing in the beginning before an action is performed
 
 05-30-16
 Version 0.4.0
