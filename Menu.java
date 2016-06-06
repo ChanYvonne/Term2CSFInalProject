@@ -321,11 +321,15 @@ public class Menu extends JFrame implements ActionListener{
 		String text = "";
 		try{
 			FileReader reader = new FileReader(currentFile + ".txt");
-			char[] textary = new char[1000];
-			reader.read(textary);
+			char[] textary = new char[10000000];
+			int chars = reader.read(textary);
 			try{
 				for(char c : textary){
-					text += c;
+					if(chars > 0){
+						System.out.println(c);
+						text += c;
+						chars--;
+					}
 				}
 			}
 			catch(NullPointerException arbitary){}
