@@ -12,7 +12,7 @@ import java.util.*;
 public class Menu extends JFrame implements ActionListener{
     private Container editor;
     private JTextPane textPane;
-    private JButton bold,italic;
+    private JButton bold,italic,undo,redo;
     private JRadioButton lalign,center,ralign;
     private ButtonGroup alignment;
     private Font font;    
@@ -28,7 +28,8 @@ public class Menu extends JFrame implements ActionListener{
     private String currentFile;
     private JTextField filenamebox;
     private boolean BoldOn, ItalicOn;
-
+    private Stack<String> changes;
+    private Stack<String> backtrack;
 
     public Menu(){
 	
@@ -49,6 +50,7 @@ public class Menu extends JFrame implements ActionListener{
 	setUpSize();	
 	setUpSave();
 	setUpStyle();
+	setUpBacktrack();
 	
 	
 	editor.add(bold);
@@ -58,6 +60,8 @@ public class Menu extends JFrame implements ActionListener{
 	editor.add(ralign);
 	editor.add(textsize);
 	editor.add(fontselect);
+	editor.add(undo);
+	editor.add(redo);
 	editor.add(textPane);	
     }
 
@@ -185,6 +189,19 @@ public class Menu extends JFrame implements ActionListener{
 	return "";
     }
 
+    private void setUpBacktrack(){
+	changes = new Stack<String>();
+	backtrack = new Stack<String>();
+	
+	undo = new JButton("undo");
+	undo.addActionListener(this);
+	undo.setActionCommand("undo");
+
+	redo = new JButton("redo");
+	redo.addActionListener(this);
+	redo.setActionCommand("redo");
+    }
+
     private void addStylesToDocument(StyledDocument doc) {
         //Initialize some styles and fonts
         Style def = StyleContext.getDefaultStyleContext().
@@ -303,13 +320,15 @@ public class Menu extends JFrame implements ActionListener{
 	    currentalignment = "center";
 	}else if(event.equals("SaveAs")){
 		save(true);
-	}
-	else if(event.equals("Save")){
+	}else if(event.equals("Save")){
 		save(false);
-	}
-	else if(event.equals("savefile")){
+	}else if(event.equals("savefile")){
 		currentFile = filenamebox.getText();
 		save(false);
+	}else if (event.equals("undo")){
+	    doc.setCharacterAttributes(start,end-start,doc.getStyle("plain"),false);
+	}else if (event.equals("redo")){
+	    doc.setCharacterAttributes(start,end-start,doc.getStyle("plain"),false);
 	}else{
 	    doc.setCharacterAttributes(start, end-start,doc.getStyle("size"),false);
 	    size = textsize.getSelectedIndex();
@@ -333,11 +352,13 @@ public class Menu extends JFrame implements ActionListener{
 
     public void updateBank(int size, String currentalign){
 	String words = textPane.getText();
-	System.out.println(words.length());
-	System.out.println(bank.getLength());
+	//System.out.println(words.length());
+	//System.out.println(bank.getLength());
 	try{
-	    for (int x = 0; x < words.length(); x++){
-		//bank.set(words.charAt(x),new Font(font.getFamily(),font.getStyle(),size), currentalign);
+	    if (!(words.equals(bank.toString()))){
+		for (int x = 0; x < words.length(); x++){
+		    bank.set(x,words.charAt(x),new Font(font.getFamily(),font.getStyle(),size), currentalign);
+		}
 	    }
 	   
 	}

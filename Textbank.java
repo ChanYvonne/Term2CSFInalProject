@@ -58,13 +58,13 @@ public class Textbank{
 
     public Textbank(){
 	text = new Node[100];
-	/*for (int x = 0; x < text.length;x++){
-	    text[x] = new Node("","",14,0);
-	}*/
+	for (int x = 0; x < text.length;x++){
+	    text[x] = new Node(' ',new Font("Arial",Font.PLAIN,20),0);
+	}
 	length = 0;
     }
 
-    public void add(char word,Font font,String align){
+    public void set(int index,char word,Font font,String align){
 	//System.out.println(text.length);
 	if (length == text.length){
 	  grow();
@@ -75,7 +75,7 @@ public class Textbank{
 	}else if (align.equals("right")){
 	    alignment = 2;
 	}
-	text[length] = new Node(word,font,alignment);
+	text[index] = new Node(word,font,alignment);
 	length++;
     }
 
@@ -149,11 +149,11 @@ public class Textbank{
     public static void main(String[] args){
 	Textbank test = new Textbank();
 	Font test2 = new Font("Courier",Font.PLAIN,16);
-	test.add('h',test2,"center");
-	test.add('e',test2,"right");
-	test.add('l',test2, "center");
-	test.add('l',test2,"left");
-	test.add('o',test2,"right");
+	test.set(0,'h',test2,"center");
+	test.set(1,'e',test2,"right");
+	test.set(2,'l',test2, "center");
+	test.set(3,'l',test2,"left");
+	test.set(4,'o',test2,"right");
 	System.out.println(test.getLength());
 	System.out.println(test.toString());
     }
