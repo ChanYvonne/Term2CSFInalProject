@@ -17,6 +17,9 @@ Ideas to possibly implement later (WAY later):
 
 #Start here when updating the readme. I will fix the version numbering later.
 
+06-03-16
+Yvonne & Sammy - fixed alignment problems
+
 06-02-16
 Yvonne & Sammy - fixed problem of changing the whole text when only parts are selected (turned out to be a VERY minor error)
 Yvonne - modified textbank to keep track of each character of the text instead of the only the strings added each time
