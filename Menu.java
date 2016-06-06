@@ -214,6 +214,12 @@ public class Menu extends JFrame implements ActionListener{
 	StyleConstants.setBold(s, false);
 	StyleConstants.setItalic(s, false);
 
+	s = doc.addStyle("notBold", regular);
+	StyleConstants.setBold(s, false);
+
+	s = doc.addStyle("notItalic", regular);
+	StyleConstants.setItalic(s, false);
+
 	int newsize;
 	if (textsize == null){
 	    newsize = 20;
@@ -265,7 +271,7 @@ public class Menu extends JFrame implements ActionListener{
 	
 	if(event.equals("turnB")){
 	    if (BoldOn){
-		doc.setCharacterAttributes(start,end-start,doc.getStyle("plain"),false);
+		doc.setCharacterAttributes(start,end-start,doc.getStyle("notBold"),false);
 		BoldOn = false;
 	    }else{
 		doc.setCharacterAttributes(start,end-start,doc.getStyle("bold"),false);
@@ -276,7 +282,7 @@ public class Menu extends JFrame implements ActionListener{
 	    
 	}else if(event.equals("turnI")){
 	    if (ItalicOn){
-		doc.setCharacterAttributes(start,end-start,doc.getStyle("plain"),false);
+		doc.setCharacterAttributes(start,end-start,doc.getStyle("notItalic"),false);
 		ItalicOn = false;
 	    }else{
 		doc.setCharacterAttributes(start,end-start,doc.getStyle("italic"),false);
@@ -310,7 +316,7 @@ public class Menu extends JFrame implements ActionListener{
 	    doc.setCharacterAttributes(start, end-start,doc.getStyle("size"),false);
 	    size = textsize.getSelectedIndex();
 	}
-	
+	/*
 	if (newStyle == 0){
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.PLAIN , size);
 	}else if (newStyle == 1){
@@ -318,7 +324,8 @@ public class Menu extends JFrame implements ActionListener{
 	}else{
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
-
+	*/
+	
 	updateBank(size,currentalignment);
     }
 
