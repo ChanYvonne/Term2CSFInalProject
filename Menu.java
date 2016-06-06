@@ -398,8 +398,9 @@ public class Menu extends JFrame implements ActionListener{
 		    bank.set(x,words.charAt(x),new Font(font.getFamily(),font.getStyle(),size), currentalign);
 		}
 		
+		
 		for (int x = words.length(); x < bank.getLength(); x++){
-		    bank.set(x,' ',new Font(font.getFamily(),font.getStyle(),size),currentalign);
+		    bank.set(x,'~',new Font("Arial",Font.PLAIN,size),currentalign);
 		}
 		
 	    }
