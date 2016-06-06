@@ -380,7 +380,7 @@ public class Menu extends JFrame implements ActionListener{
 	    saveas.setTitle("Save As...");
 	    saveas.setSize(200, 100);
 	    saveas.setLocation(200, 100);
-	    saveas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    saveas.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     		saveas.setVisible(true);
 		filenamebox = new JTextField("Type your filename here.", 10);
 		filenamebox.addActionListener(this);
@@ -417,7 +417,7 @@ public class Menu extends JFrame implements ActionListener{
 	    open.setTitle("Open...");
 	    open.setSize(200, 100);
 	    open.setLocation(200, 100);
-	    open.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    open.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	open.setVisible(true);
 		filenamebox = new JTextField("Type your filename here.", 10);
 		filenamebox.addActionListener(this);
