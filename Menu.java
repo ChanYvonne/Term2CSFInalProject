@@ -25,7 +25,7 @@ public class Menu extends JFrame implements ActionListener{
 
     private JMenuBar menu;
     private JMenu filemenu;
-    private JMenuItem save, saveAs;
+    private JMenuItem save, saveAs, open;
     private File savefile;
     private String currentFile;
     private JTextField filenamebox;
@@ -49,7 +49,7 @@ public class Menu extends JFrame implements ActionListener{
 	setUpTextPane();
 	setUpFont();
 	setUpSize();	
-	setUpSave();
+	setUpMenuBar();
 	setUpStyle();
 	
 	
@@ -84,7 +84,7 @@ public class Menu extends JFrame implements ActionListener{
 	
     }
 
-    public void setUpSave(){
+    public void setUpMenuBar(){
 	menu = new JMenuBar();
 	setJMenuBar(menu);
 	filemenu = new JMenu("File");
@@ -94,6 +94,9 @@ public class Menu extends JFrame implements ActionListener{
 	saveAs = filemenu.add("Save As...");
 	saveAs.setActionCommand("SaveAs");
 	saveAs.addActionListener(this);
+	open = filemenu.add("Open");
+	open.setActionCommand("Open");
+	open.addActionListener(this);
 	menu.add(filemenu);
     }
     
@@ -306,7 +309,11 @@ public class Menu extends JFrame implements ActionListener{
 	else if(event.equals("savefile")){
 		currentFile = filenamebox.getText();
 		save(false);
-	}else{
+	}
+	else if(event.equals("Open")){
+		open();
+	}
+	else{
 	    doc.setCharacterAttributes(start, end-start,doc.getStyle("size"),false);
 	    size = textsize.getSelectedIndex();
 	}
@@ -381,6 +388,9 @@ public class Menu extends JFrame implements ActionListener{
 		}
     }
 
+    public void open(){
+    	System.out.println("LET THERE BE GUITAAAAA THERE WAS GUITAAAAA");
+    }
 
     public static void main(String[] args){
 	Menu test = new Menu();
