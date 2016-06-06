@@ -76,16 +76,17 @@ public class Textbank{
 	    alignment = 2;
 	}
 	text[index] = new Node(word,font,alignment);
-	length++;
     }
 
+    /*
     public void undo(){
 	if (length == 0){
 	    throw new NoSuchElementException();
 	}
 	length--;
 	text[length] = null;
-    }
+   }
+    */
 
     public char getText(int index){
 	return text[index].text();
@@ -120,7 +121,10 @@ public class Textbank{
 	text = temp;
     }
 
-    public int getLength(){
+    public int getLength(){ //need to fix because it doesn't take into account spaces in typing
+        while (text[length].text() != ' '){
+	    length++;
+	}
 	return length;
     }
     

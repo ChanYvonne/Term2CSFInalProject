@@ -390,13 +390,18 @@ public class Menu extends JFrame implements ActionListener{
 
     public void updateBank(int size, String currentalign){
 	String words = textPane.getText();
-	//System.out.println(words.length());
-	//System.out.println(bank.getLength());
+	System.out.println(words.length());
+	System.out.println(bank.getLength());
 	try{
 	    if (!(words.equals(bank.toString()))){
 		for (int x = 0; x < words.length(); x++){
 		    bank.set(x,words.charAt(x),new Font(font.getFamily(),font.getStyle(),size), currentalign);
 		}
+		
+		for (int x = words.length(); x < bank.getLength(); x++){
+		    bank.set(x,' ',new Font(font.getFamily(),font.getStyle(),size),currentalign);
+		}
+		
 	    }
 	   
 	}
