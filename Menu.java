@@ -1,14 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
-
 import javax.swing.text.*;
 import javax.swing.undo.*;
-
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class Menu extends JFrame implements ActionListener{
@@ -64,15 +62,12 @@ public class Menu extends JFrame implements ActionListener{
     }
 
     public void setUpTextPane(){
-	//String[] sample ={"testing ", "please ", "work ", "before ", "I ", "pass ", "out"};
-	//String[] styles = {"regular","italic","bold","small","large","regular","regular"};
-	//textPane.setEditable(true);
 	
 	StyledDocument doc = textPane.getStyledDocument();
 	addStylesToDocument(doc);
 	caretPosition = doc.getLength();
 	doc.setParagraphAttributes(0,caretPosition, doc.getStyle("regular"),false);
-	
+	/*
 	try {
 	    for (int i=0; i < bank.getLength(); i++) {
 		doc.insertString(caretPosition,String.valueOf(bank.getText(i)),doc.getStyle("regular"));
@@ -81,7 +76,7 @@ public class Menu extends JFrame implements ActionListener{
 	} catch (BadLocationException e) {
 	    System.out.println("unable to insert text into text pane.");
 	}
-	
+	*/
     }
 
     public void setUpSave(){
@@ -195,14 +190,8 @@ public class Menu extends JFrame implements ActionListener{
         Style def = StyleContext.getDefaultStyleContext().
                         getStyle(StyleContext.DEFAULT_STYLE);
 
-	String fontname;
-	if (fontlist == null){
-	    fontname = "Arial";
-	}else{
-	    fontname = fontlist[fontselect.getSelectedIndex()].getFamily();
-	}
-        Style regular = doc.addStyle("regular", def);
-        StyleConstants.setFontFamily(def,fontname);
+	Style regular = doc.addStyle("regular", def);
+        StyleConstants.setFontFamily(def,"Arial");
        
         Style s = doc.addStyle("italic", regular);
         StyleConstants.setItalic(s, true);
@@ -220,6 +209,15 @@ public class Menu extends JFrame implements ActionListener{
 	s = doc.addStyle("notItalic", regular);
 	StyleConstants.setItalic(s, false);
 
+	String fontname;
+	if (fontlist == null){
+	    fontname = "Arial";
+	}else{
+	    fontname = fontlist[fontselect.getSelectedIndex()].getFamily();
+	}
+	s = doc.addStyle("font",regular);
+	StyleConstants.setFontFamily(s,fontname);
+	
 	int newsize;
 	if (textsize == null){
 	    newsize = 20;
@@ -290,7 +288,7 @@ public class Menu extends JFrame implements ActionListener{
 		newStyle = 2;
 	    }
 	}else if (event.equals("font")){
-	    doc.setCharacterAttributes(start,end-start,doc.getStyle("regular"),false);
+	    doc.setCharacterAttributes(start,end-start,doc.getStyle("font"),false);
 	}else if (event.equals("Left-aligned")){
 	    lalign.setSelected(true);
 	    doc.setParagraphAttributes(0,doc.getLength(),doc.getStyle("left"),false);
