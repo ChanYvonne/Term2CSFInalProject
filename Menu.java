@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.io.FileReader;
 
 import javax.swing.text.*;
 import javax.swing.undo.*;
@@ -25,11 +26,12 @@ public class Menu extends JFrame implements ActionListener{
 
     private JMenuBar menu;
     private JMenu filemenu;
-    private JMenuItem save, saveAs, open;
+    private JMenuItem save, saveAs, openitem;
     private File savefile;
     private String currentFile;
     private JTextField filenamebox;
     private boolean BoldOn, ItalicOn;
+    private JFrame saveas, open;
 
 
     public Menu(){
@@ -94,9 +96,9 @@ public class Menu extends JFrame implements ActionListener{
 	saveAs = filemenu.add("Save As...");
 	saveAs.setActionCommand("SaveAs");
 	saveAs.addActionListener(this);
-	open = filemenu.add("Open");
-	open.setActionCommand("Open");
-	open.addActionListener(this);
+	openitem = filemenu.add("Open");
+	openitem.setActionCommand("Open");
+	openitem.addActionListener(this);
 	menu.add(filemenu);
     }
     
@@ -309,9 +311,31 @@ public class Menu extends JFrame implements ActionListener{
 	else if(event.equals("savefile")){
 		currentFile = filenamebox.getText();
 		save(false);
+		saveas.dispose();
 	}
 	else if(event.equals("Open")){
 		open();
+	}
+	else if(event.equals("openfile")){
+		currentFile = filenamebox.getText();
+		String text = "";
+		try{
+			FileReader reader = new FileReader(currentFile + ".txt");
+			char[] textary = new char[1000];
+			reader.read(textary);
+			try{
+				for(char c : textary){
+					text += c;
+				}
+			}
+			catch(NullPointerException arbitary){}
+			textPane.setText(text);
+			reader.close();
+		}
+		catch(IOException i){
+			System.out.println("Cannot open this file at this time. Please try again.");
+		}
+		open.dispose();
 	}
 	else{
 	    doc.setCharacterAttributes(start, end-start,doc.getStyle("size"),false);
@@ -352,7 +376,7 @@ public class Menu extends JFrame implements ActionListener{
 
     public void save(boolean as){
     	if(as){
-	    JFrame saveas = new JFrame();
+	    saveas = new JFrame();
 	    saveas.setTitle("Save As...");
 	    saveas.setSize(200, 100);
 	    saveas.setLocation(200, 100);
@@ -389,7 +413,21 @@ public class Menu extends JFrame implements ActionListener{
     }
 
     public void open(){
-    	System.out.println("LET THERE BE GUITAAAAA THERE WAS GUITAAAAA");
+    	open = new JFrame();
+	    open.setTitle("Open...");
+	    open.setSize(200, 100);
+	    open.setLocation(200, 100);
+	    open.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	open.setVisible(true);
+		filenamebox = new JTextField("Type your filename here.", 10);
+		filenamebox.addActionListener(this);
+		JButton openfile = new JButton("Open");
+		openfile.addActionListener(this);
+		openfile.setActionCommand("openfile");
+		open.add(filenamebox);
+		open.add(openfile);
+		Container openpane = open.getContentPane();
+		openpane.setLayout(new BoxLayout(openpane, BoxLayout.PAGE_AXIS));
     }
 
     public static void main(String[] args){
