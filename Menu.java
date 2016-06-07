@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.io.FileReader;
 import javax.swing.text.*;
 import javax.swing.undo.*;
 import java.util.*;
@@ -12,7 +13,7 @@ import java.util.*;
 public class Menu extends JFrame implements ActionListener{
     private Container editor;
     private JTextPane textPane;
-    private JButton bold,italic;
+    private JButton bold,italic,undo,redo;
     private JRadioButton lalign,center,ralign;
     private ButtonGroup alignment;
     private Font font;    
@@ -23,12 +24,14 @@ public class Menu extends JFrame implements ActionListener{
 
     private JMenuBar menu;
     private JMenu filemenu;
-    private JMenuItem save, saveAs;
+    private JMenuItem save, saveAs, openitem;
     private File savefile;
     private String currentFile;
     private JTextField filenamebox;
     private boolean BoldOn, ItalicOn;
-
+    private Stack<String> changes;
+    private MyQueue<String> backtrack;
+    private JFrame saveas, open;
 
     public Menu(){
 	
@@ -47,8 +50,9 @@ public class Menu extends JFrame implements ActionListener{
 	setUpTextPane();
 	setUpFont();
 	setUpSize();	
-	setUpSave();
+	setUpMenuBar();
 	setUpStyle();
+	setUpBacktrack();
 	
 	
 	editor.add(bold);
@@ -58,6 +62,8 @@ public class Menu extends JFrame implements ActionListener{
 	editor.add(ralign);
 	editor.add(textsize);
 	editor.add(fontselect);
+	editor.add(undo);
+	editor.add(redo);
 	editor.add(textPane);	
     }
 
@@ -79,7 +85,7 @@ public class Menu extends JFrame implements ActionListener{
 	*/
     }
 
-    public void setUpSave(){
+    public void setUpMenuBar(){
 	menu = new JMenuBar();
 	setJMenuBar(menu);
 	filemenu = new JMenu("File");
@@ -89,6 +95,9 @@ public class Menu extends JFrame implements ActionListener{
 	saveAs = filemenu.add("Save As...");
 	saveAs.setActionCommand("SaveAs");
 	saveAs.addActionListener(this);
+	openitem = filemenu.add("Open");
+	openitem.setActionCommand("Open");
+	openitem.addActionListener(this);
 	menu.add(filemenu);
     }
     
@@ -166,8 +175,8 @@ public class Menu extends JFrame implements ActionListener{
 	textsize.setEditable(true);
 	textsize.setPreferredSize(new Dimension(50,25));
         textsize.setMaximumSize(textsize.getPreferredSize());
-        textsize.addActionListener(this);
-
+	textsize.addActionListener(this);
+	textsize.setActionCommand("size");
     }
 
     // converts int format of font class to intialized styles documentation
@@ -183,6 +192,19 @@ public class Menu extends JFrame implements ActionListener{
 	    }
 	}
 	return "";
+    }
+
+    private void setUpBacktrack(){
+	changes = new Stack<String>();
+	backtrack = new MyQueue<String>();
+	
+	undo = new JButton("undo");
+	undo.addActionListener(this);
+	undo.setActionCommand("undo");
+
+	redo = new JButton("redo");
+	redo.addActionListener(this);
+	redo.setActionCommand("redo");
     }
 
     private void addStylesToDocument(StyledDocument doc) {
@@ -251,7 +273,7 @@ public class Menu extends JFrame implements ActionListener{
 	addStylesToDocument(doc);
 	int newStyle = 0;
 	String currentalignment = "";
-	
+	String recentChange = "regular";
 	
 	//System.out.println(words);
 	//doc.insertString(doc.getLength(),words, doc.getStyle("regular"));
@@ -271,10 +293,12 @@ public class Menu extends JFrame implements ActionListener{
 	    if (BoldOn){
 		doc.setCharacterAttributes(start,end-start,doc.getStyle("notBold"),false);
 		BoldOn = false;
+	        recentChange = "notBold";
 	    }else{
 		doc.setCharacterAttributes(start,end-start,doc.getStyle("bold"),false);
 		BoldOn = true;
 		newStyle = 1;
+		recentChange = "bold";
 	    }
 	    
 	    
@@ -282,37 +306,84 @@ public class Menu extends JFrame implements ActionListener{
 	    if (ItalicOn){
 		doc.setCharacterAttributes(start,end-start,doc.getStyle("notItalic"),false);
 		ItalicOn = false;
+		recentChange = "notItalic";
 	    }else{
 		doc.setCharacterAttributes(start,end-start,doc.getStyle("italic"),false);
 		ItalicOn = true;
 		newStyle = 2;
+		recentChange = "italic";
 	    }
 	}else if (event.equals("font")){
 	    doc.setCharacterAttributes(start,end-start,doc.getStyle("font"),false);
+	    recentChange = "font";
 	}else if (event.equals("Left-aligned")){
 	    lalign.setSelected(true);
 	    doc.setParagraphAttributes(0,doc.getLength(),doc.getStyle("left"),false);
 	    currentalignment = "left";
+	    recentChange = "left";
 	}else if (event.equals("Right-aligned")){
 	    ralign.setSelected(true);
 	    doc.setParagraphAttributes(0,doc.getLength(),doc.getStyle("right"),false);
 	    currentalignment = "right";
+	    recentChange = "right";
 	}else if (event.equals("Center")){
 	    center.setSelected(true);
 	    doc.setParagraphAttributes(0, doc.getLength(),doc.getStyle("center"),false);
 	    currentalignment = "center";
+	    recentChange = "center";
 	}else if(event.equals("SaveAs")){
 		save(true);
-	}
-	else if(event.equals("Save")){
+	}else if(event.equals("Save")){
 		save(false);
-	}
-	else if(event.equals("savefile")){
+	}else if(event.equals("savefile")){
 		currentFile = filenamebox.getText();
 		save(false);
-	}else{
+	}else if (event.equals("undo")){
+	    if (!changes.empty()){
+		backtrack.enqueue(changes.peek());
+		doc.setCharacterAttributes(start,end-start,doc.getStyle(changes.pop()),false);
+	    }
+	}else if (event.equals("redo")){
+	    if (!changes.empty()){
+		changes.push(backtrack.peek());
+		doc.setCharacterAttributes(start,end-start,doc.getStyle(backtrack.dequeue()),false);
+	    }
+	}
+	else if(event.equals("Open")){
+		open();
+	}
+	else if(event.equals("openfile")){ // I recommend putting this in another method
+		currentFile = filenamebox.getText();
+		String text = "";
+		try{
+			FileReader reader = new FileReader(currentFile + ".txt");
+			char[] textary = new char[10000000];
+			int chars = reader.read(textary);
+			try{
+				for(char c : textary){
+					if(chars > 0){
+						System.out.println(c);
+						text += c;
+						chars--;
+					}
+				}
+			}
+			catch(NullPointerException arbitary){}
+			textPane.setText(text);
+			reader.close();
+		}
+		catch(IOException i){
+			System.out.println("Cannot open this file at this time. Please try again.");
+		}
+		open.dispose();
+	}
+	else if (event.equals("size")){
 	    doc.setCharacterAttributes(start, end-start,doc.getStyle("size"),false);
 	    size = textsize.getSelectedIndex();
+	    recentChange = "size";
+	    
+	}else{
+		saveas.dispose();
 	}
 	/*
 	if (newStyle == 0){
@@ -323,8 +394,10 @@ public class Menu extends JFrame implements ActionListener{
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
 	*/
-	
+	changes.push(recentChange);
 	updateBank(size,currentalignment);
+	System.out.println(changes);
+	System.out.println(backtrack);
     }
 
     public String wordBank(){
@@ -333,11 +406,19 @@ public class Menu extends JFrame implements ActionListener{
 
     public void updateBank(int size, String currentalign){
 	String words = textPane.getText();
-	System.out.println(words.length());
-	System.out.println(bank.getLength());
+	//System.out.println(words.length());
+	//System.out.println(bank.getLength());
 	try{
-	    for (int x = 0; x < words.length(); x++){
-		//bank.set(words.charAt(x),new Font(font.getFamily(),font.getStyle(),size), currentalign);
+	    if (!(words.equals(bank.toString()))){
+		for (int x = 0; x < words.length(); x++){
+		    bank.set(x,words.charAt(x),new Font(font.getFamily(),font.getStyle(),size), currentalign);
+		}
+		
+		
+		for (int x = words.length(); x < bank.getLength(); x++){
+		    bank.set(x,'~',new Font("Arial",Font.PLAIN,size),currentalign);
+		}
+		
 	    }
 	   
 	}
@@ -345,16 +426,16 @@ public class Menu extends JFrame implements ActionListener{
 		System.out.println("There is no text.");
 	}
 	
-	System.out.println(wordBank());
+	//System.out.println(wordBank());
     }
 
     public void save(boolean as){
     	if(as){
-	    JFrame saveas = new JFrame();
+	    saveas = new JFrame();
 	    saveas.setTitle("Save As...");
 	    saveas.setSize(200, 100);
 	    saveas.setLocation(200, 100);
-	    saveas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    saveas.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     		saveas.setVisible(true);
 		filenamebox = new JTextField("Type your filename here.", 10);
 		filenamebox.addActionListener(this);
@@ -386,6 +467,23 @@ public class Menu extends JFrame implements ActionListener{
 		}
     }
 
+    public void open(){
+    	open = new JFrame();
+	    open.setTitle("Open...");
+	    open.setSize(200, 100);
+	    open.setLocation(200, 100);
+	    open.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    	open.setVisible(true);
+		filenamebox = new JTextField("Type your filename here.", 10);
+		filenamebox.addActionListener(this);
+		JButton openfile = new JButton("Open");
+		openfile.addActionListener(this);
+		openfile.setActionCommand("openfile");
+		open.add(filenamebox);
+		open.add(openfile);
+		Container openpane = open.getContentPane();
+		openpane.setLayout(new BoxLayout(openpane, BoxLayout.PAGE_AXIS));
+    }
 
     public static void main(String[] args){
 	Menu test = new Menu();
