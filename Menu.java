@@ -29,8 +29,6 @@ public class Menu extends JFrame implements ActionListener{
     private String currentFile;
     private JTextField filenamebox;
     private boolean BoldOn, ItalicOn;
-    private Stack<String> changes;
-    private MyQueue<String> backtrack;
     private JFrame saveas, open;
 
     public Menu(){
@@ -52,7 +50,6 @@ public class Menu extends JFrame implements ActionListener{
 	setUpSize();	
 	setUpMenuBar();
 	setUpStyle();
-	setUpBacktrack();
 	
 	
 	editor.add(bold);
@@ -62,8 +59,6 @@ public class Menu extends JFrame implements ActionListener{
 	editor.add(ralign);
 	editor.add(textsize);
 	editor.add(fontselect);
-	editor.add(undo);
-	editor.add(redo);
 	editor.add(textPane);	
     }
 
@@ -192,19 +187,6 @@ public class Menu extends JFrame implements ActionListener{
 	    }
 	}
 	return "";
-    }
-
-    private void setUpBacktrack(){
-	changes = new Stack<String>();
-	backtrack = new MyQueue<String>();
-
-	undo = new JButton("undo");
-	undo.addActionListener(this);
-	undo.setActionCommand("undo");
-
-	redo = new JButton("redo");
-	redo.addActionListener(this);
-	redo.setActionCommand("redo");
     }
 
     private void addStylesToDocument(StyledDocument doc) {
@@ -338,18 +320,7 @@ public class Menu extends JFrame implements ActionListener{
 	}else if(event.equals("savefile")){
 		currentFile = filenamebox.getText();
 		save(false);
-	}else if (event.equals("undo")){
-	    if (!changes.empty()){
-		backtrack.enqueue(changes.peek());
-		doc.setCharacterAttributes(start,end-start,doc.getStyle(changes.pop()),false);
-	    }
-	}else if (event.equals("redo")){
-	    if (!changes.empty()){
-		changes.push(backtrack.peek());
-		doc.setCharacterAttributes(start,end-start,doc.getStyle(backtrack.dequeue()),false);
-	    }
-	}
-	else if(event.equals("Open")){
+	}else if(event.equals("Open")){
 		open();
 	}
 	else if(event.equals("openfile")){ // I recommend putting this in another method
@@ -385,7 +356,7 @@ public class Menu extends JFrame implements ActionListener{
 	}else{
 		saveas.dispose();
 	}
-	/*
+	
 	if (newStyle == 0){
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.PLAIN , size);
 	}else if (newStyle == 1){
@@ -393,19 +364,16 @@ public class Menu extends JFrame implements ActionListener{
 	}else{
 	    font = new Font(fontlist[fontselect.getSelectedIndex()].getFamily(),Font.ITALIC , size);
 	}
-	*/
-	changes.push(recentChange);
-	updateBank(size,currentalignment);
-	System.out.println(changes);
-	System.out.println(backtrack);
+	
     }
 
     public String wordBank(){
 	return bank.toString();
     }
 
-    public void updateBank(int size, String currentalign){
+    public void updateBank(int size, String currentalign,String recentChange){
 	String words = textPane.getText();
+	String text = textPane.getSelectedText();
 	//System.out.println(words.length());
 	//System.out.println(bank.getLength());
 	try{
@@ -416,7 +384,7 @@ public class Menu extends JFrame implements ActionListener{
 		
 		
 		for (int x = words.length(); x < bank.getLength(); x++){
-		    bank.set(x,'~',new Font("Arial",Font.PLAIN,size),currentalign);
+		    bank.set(x,'~',new Font(font.getFamily(),font.getStyle(),size),currentalign);
 		}
 		
 	    }
@@ -425,8 +393,6 @@ public class Menu extends JFrame implements ActionListener{
 	catch(IndexOutOfBoundsException i){
 		System.out.println("There is no text.");
 	}
-	
-	//System.out.println(wordBank());
     }
 
     public void save(boolean as){

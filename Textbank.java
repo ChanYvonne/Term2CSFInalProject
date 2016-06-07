@@ -1,7 +1,7 @@
 import java.util.*;
 import java.awt.*;
 public class Textbank{
-    //change font to be type Font;
+    //used for saving text and opening files
     private class Node{
 	private char text;
 	private Font font;
@@ -56,8 +56,60 @@ public class Textbank{
 	    alignment = align;
 	}
     }
+    /*
+    //used for undo and redo functions
+    private class Pod{
+	private String text, alignment, newStyle;
+	private Font font;
+
+	public Node(String character,Font font, String align,String style){
+	    text = character;
+	    this.font = font;
+	    alignment = align;
+	    newStyle = style;
+	}
+
+	public String text(){
+	    return text;
+	}
+
+	public Font font(){
+	    return font;
+	}
+
+	public int size(){
+	    return font.getSize();
+	}
+
+	public int style(){
+	    return font.getStyle();
+	}
+
+	public String alignment(){
+	    return alignment;
+	}
+
+	public String change(){
+	    return newStyle;
+	}
+
+	public void setText(String character){
+	    text = character;
+	}
+
+	public void setFont(Font f){
+	    font = new Font(f.getFamily(), f.getStyle(), font.getSize());
+	}
+	
+	public void setAlign(String align){
+	    alignment = align;
+	}
+    }
+    */
     
     private Node[] text;
+    //private Stack<Pod> changes;
+    //private MyQueue<Pod> backtrack;
     private int length;
 
     public Textbank(){
@@ -66,6 +118,8 @@ public class Textbank{
 	    text[x] = new Node('~',new Font("Arial",Font.PLAIN,20),0);
 	}
 	length = 0;
+	//changes = new Stack<Pod>();
+	//backtrack = new MyQueue<Pod>();
     }
 
     public void set(int index,char word,Font font,String align){
@@ -85,13 +139,35 @@ public class Textbank{
     }
 
     /*
-    public void undo(){
-	if (length == 0){
-	    throw new NoSuchElementException();
-	}
-	length--;
-	text[length] = null;
-   }
+    public void redo(String word,int size, String align, String change, Font font){
+        backtrack.enqueue(new Pod(word,new Font(font.getFamily(),font.getStyle(),size),align,change))
+    }
+
+    public String getRedoText(){
+	return backtrack.peek().text();
+    }
+
+    
+    public String getRedoStyle(){
+	return backtrack.peek().style();
+    }
+
+    public String getRedoChange(){
+	return backtrack.peek().change();
+    }
+
+    public int getRedoSize(){
+	return backtrack.peek().size();
+    }
+
+    public String getRedoAlignment(){
+	return backtrack.peek().align();
+    }
+
+    public void push(String word,int size, String align, String change, Font font){
+	changes.push(new Pod(word,new Font(font.getFamily(),font.getStyle(),size),align))
+    }
+
     */
 
     public char getText(int index){
