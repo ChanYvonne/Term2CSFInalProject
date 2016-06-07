@@ -197,7 +197,7 @@ public class Menu extends JFrame implements ActionListener{
     private void setUpBacktrack(){
 	changes = new Stack<String>();
 	backtrack = new MyQueue<String>();
-	
+
 	undo = new JButton("undo");
 	undo.addActionListener(this);
 	undo.setActionCommand("undo");
