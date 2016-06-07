@@ -17,6 +17,14 @@ Ideas to possibly implement later (WAY later):
 
 #Start here when updating the readme. I will fix the version numbering later.
 
+06-06-16
+Yvonne - couldn't get undo/redo working in time (much harder than I thought)
+       - merged everything and fixed any minor issues 
+
+06-05-16
+Yvonne - fixed problem with bold/italic where when both were applied, one of them would cancel out the other
+       - finally got font selection for specific text working properly
+
 06-03-16
 Yvonne & Sammy - fixed alignment problems
 
