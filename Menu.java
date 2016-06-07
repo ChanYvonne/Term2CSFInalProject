@@ -32,6 +32,7 @@ public class Menu extends JFrame implements ActionListener{
     private Stack<String> changes;
     private Stack<String> backtrack;
     private JFrame saveas, open;
+    private FileWriter writer;
 
     public Menu(){
 	
@@ -266,7 +267,6 @@ public class Menu extends JFrame implements ActionListener{
     }
     
     public void actionPerformed(ActionEvent e){
-		        
 	String event = e.getActionCommand();
 	size = 16;
 	StyledDocument doc = textPane.getStyledDocument();
@@ -330,6 +330,7 @@ public class Menu extends JFrame implements ActionListener{
 	}else if(event.equals("savefile")){
 		currentFile = filenamebox.getText();
 		save(false);
+		saveas.dispose();
 	}else if (event.equals("undo")){
 	    doc.setCharacterAttributes(start,end-start,doc.getStyle("plain"),false);
 	}else if (event.equals("redo")){
@@ -347,15 +348,18 @@ public class Menu extends JFrame implements ActionListener{
 			char[] textary = new char[10000000];
 			int chars = reader.read(textary);
 			try{
-				for(char c : textary){
-					if(chars > 0){
-						System.out.println(c);
-						text += c;
-						chars--;
+				for(int i = 0; i < chars; i++){
+						if(textary[i] == '<'){
+							while(textary[i] != '>'){
+								i++;
+							}
+						}else{
+						text += textary[i];
 					}
-				}
+					}
 			}
-			catch(NullPointerException arbitary){}
+			catch(NullPointerException arbitrary){}
+			opentags(text, textary, chars);
 			textPane.setText(text);
 			reader.close();
 		}
@@ -439,9 +443,20 @@ public class Menu extends JFrame implements ActionListener{
     		savefile = new File(System.getProperty("user.dir"), currentFile + ".txt");
 			try{
 				savefile.createNewFile();
-				FileWriter writer = new FileWriter(savefile);
-				String text = textPane.getText();
-				writer.write(text);
+				writer = new FileWriter(savefile);
+				String align = writeAlign(0);
+				int style = writeStyle(0);
+				for(int i = 0; i < bank.getLength(); i++){
+					char c = bank.getText(i);
+					if(!(bank.getAlignment(i).equals(align))){
+						align = writeAlign(i);
+					}
+					if(!(bank.getStyle(i) == style)){
+						style = writeStyle(i);
+					}
+					//System.out.println(Font.BOLD + "Style:"  + style);
+					writer.write(c);
+				}
 				writer.flush();
 				writer.close();
 			}
@@ -467,6 +482,66 @@ public class Menu extends JFrame implements ActionListener{
 		open.add(openfile);
 		Container openpane = open.getContentPane();
 		openpane.setLayout(new BoxLayout(openpane, BoxLayout.PAGE_AXIS));
+    }
+
+    private String writeAlign(int index){
+    	String aligntag = "<a = " + bank.getAlignment(index) + ">";
+    	try{
+    		writer.write(aligntag);
+    	}
+    	catch(IOException e){}
+    	return bank.getAlignment(index);
+    }
+
+    private void writeFont(){
+
+    }
+
+    private int writeStyle(int index){
+    	try{
+    	if(bank.getStyle(index) == Font.PLAIN){
+    		writer.write("<p>");
+    	}
+    	else if(bank.getStyle(index) == Font.BOLD){
+    		writer.write("<b>");
+    	}
+    	else if(bank.getStyle(index) == Font.ITALIC){
+    		writer.write("<i>");
+    	}
+    	else if(bank.getStyle(index) == Font.BOLD + Font.ITALIC){
+    		writer.write("<bi>");
+    	}
+    }
+    catch(IOException e){}
+    	return bank.getStyle(index);
+    }
+
+    private void opentags(String text, char[] textary, int chars){
+    	int j = 0; // for keeping track of text position
+    	String align = "left";
+    	String fontname = fontlist[0].getFontName();
+    	int size = 20;
+    	int style = Font.PLAIN;
+    	for(int i = 0; i < chars; i++){
+    		if(textary[i] == '<'){
+    			if(textary[i + 1] == 'a'){
+    				i += 5;
+    				align = "";
+    				while(textary[i] != '>'){
+    					System.out.println(textary[i]);
+    					align += textary[i];
+    					i++;
+    				}
+    				i++;
+    			}
+    			else if(textary[i + 1] == 'b'){
+    				style = Font.BOLD;
+    			}
+    		}
+    		Font setfont = new Font(fontname, style, size);
+    		bank.set(j, textary[i], font, align);
+    		j++;
+    	}
     }
 
     public static void main(String[] args){
